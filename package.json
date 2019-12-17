@@ -1,0 +1,12 @@
+{
+  "name": "photo-organization",
+  "version": "1.0.0",
+  "description": "A collection of scripts to help organize photos by their EXIF datetime metadata.",
+  "author": "Alex Lin",
+  "license": "MIT",
+  "dependencies": {
+    "lodash": "^4.17.15",
+    "luxon": "^1.21.3",
+    "prettier": "^1.19.1"
+  }
+}
