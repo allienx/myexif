@@ -5,13 +5,15 @@ const fs = require('fs')
 const path = require('path')
 
 const first = require('lodash/first')
+const last = require('lodash/last')
 const { DateTime } = require('luxon')
 
 const args = process.argv.map(arg => arg)
 args.shift()
 args.shift()
 
-const dir = first(args) || '.'
+const zone = args[0]
+const dir = last(args) || '.'
 
 fs.readdir(dir, (err, files) => {
   if (err) {
@@ -36,7 +38,7 @@ fs.readdir(dir, (err, files) => {
       hour,
       minute,
       second,
-      zone: 'America/Los_Angeles',
+      zone,
     })
 
     const utcFormat = dt.toUTC().toFormat('yyyy:MM:dd HH:mm:ss')
