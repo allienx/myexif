@@ -1,12 +1,13 @@
 #!/usr/bin/env node
 
-const { exec } = require('child_process')
 const fs = require('fs')
 const path = require('path')
 
 const first = require('lodash/first')
 const last = require('lodash/last')
 const { DateTime } = require('luxon')
+
+const { execProcess } = require('./util/execProcess')
 
 const args = process.argv.map(arg => arg)
 args.shift()
@@ -15,14 +16,18 @@ args.shift()
 const zone = args[0]
 const dir = last(args) || '.'
 
-fs.readdir(dir, (err, files) => {
+fs.readdir(dir, { withFileTypes: true }, (err, files) => {
   if (err) {
     console.log(err)
     return
   }
 
-  files.forEach(async filename => {
-    const matches = filename.match(/\d\d\d\d-\d\d-\d\d-\d\d-\d\d-\d\d/g)
+  files.forEach(async dirent => {
+    if (!dirent.isFile() || dirent.name.startsWith('.')) {
+      return
+    }
+
+    const matches = dirent.name.match(/\d\d\d\d-\d\d-\d\d-\d\d-\d\d-\d\d/g)
     const match = first(matches)
 
     if (!match) {
@@ -55,7 +60,7 @@ fs.readdir(dir, (err, files) => {
       `'-QuickTime:MediaCreateDate=${utcFormat}'`,
       `'-QuickTime:MediaModifyDate=${utcFormat}'`,
       `'-QuickTime:CreationDate=${zoneFormat}'`,
-      path.join(dir, filename),
+      path.join(dir, dirent.name),
     ]
 
     const { stdout } = await execProcess(cmdArgs.join(' '))
@@ -63,16 +68,3 @@ fs.readdir(dir, (err, files) => {
     console.log(stdout.trim())
   })
 })
-
-function execProcess(cmd, opt) {
-  return new Promise((resolve, reject) => {
-    exec(cmd, opt, (err, stdout, stderr) => {
-      if (err) {
-        reject(err)
-        return
-      }
-
-      resolve({ stdout, stderr })
-    })
-  })
-}

@@ -1,11 +1,12 @@
 #!/usr/bin/env node
 
-const { exec } = require('child_process')
 const fs = require('fs')
 const path = require('path')
 
 const last = require('lodash/last')
 const { DateTime } = require('luxon')
+
+const { execProcess } = require('./util/execProcess')
 
 const args = process.argv.map(arg => arg)
 args.shift()
@@ -61,17 +62,4 @@ async function getCreateDate(path) {
   parts.splice(0, 1)
 
   return parts.join(':').trim()
-}
-
-function execProcess(cmd, opt) {
-  return new Promise((resolve, reject) => {
-    exec(cmd, opt, (err, stdout, stderr) => {
-      if (err) {
-        reject(err)
-        return
-      }
-
-      resolve({ stdout, stderr })
-    })
-  })
 }
