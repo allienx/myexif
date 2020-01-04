@@ -1,12 +1,13 @@
 #!/usr/bin/env node
 
-const fs = require('fs')
 const path = require('path')
 
 const last = require('lodash/last')
 const { DateTime } = require('luxon')
 
-const { execProcess } = require('./util/execProcess')
+const { exec } = require('./util/promises/child_process')
+const { readdir } = require('./util/promises/fs')
+const getExiftoolValue = require('./util/getExiftoolValue')
 
 const args = process.argv.map(arg => arg)
 args.shift()
@@ -15,18 +16,30 @@ args.shift()
 const zone = args[0]
 const dir = last(args) || '.'
 
-fs.readdir(dir, { withFileTypes: true }, (err, files) => {
-  if (err) {
+main()
+  .catch(err => {
     console.log(err)
-    return
-  }
+    console.log()
+  })
+  .finally(() => {
+    console.log('✨  Done.')
+  })
 
-  files.forEach(async dirent => {
+async function main() {
+  const files = await readdir(dir, { withFileTypes: true })
+
+  for (let i = 0; i < files.length; i++) {
+    const dirent = files[i]
+
     if (!dirent.isFile() || dirent.name.startsWith('.')) {
-      return
+      continue
     }
 
-    const createDate = await getCreateDate(path.join(dir, dirent.name))
+    const createDate = await getExiftoolValue(
+      'CreateDate',
+      path.join(dir, dirent.name),
+    )
+
     const dt = DateTime.fromFormat(createDate, 'yyyy:MM:dd HH:mm:ss', {
       zone: 'utc',
     })
@@ -48,18 +61,8 @@ fs.readdir(dir, { withFileTypes: true }, (err, files) => {
       path.join(dir, dirent.name),
     ]
 
-    const { stdout } = await execProcess(cmdArgs.join(' '))
+    const { stdout } = await exec(cmdArgs.join(' '))
 
     console.log(stdout.trim())
-  })
-})
-
-async function getCreateDate(path) {
-  const cmdArgs = ['exiftool', '-CreateDate', path]
-
-  const { stdout } = await execProcess(cmdArgs.join(' '))
-  const parts = stdout.trim().split(':')
-  parts.splice(0, 1)
-
-  return parts.join(':').trim()
+  }
 }
