@@ -34,6 +34,11 @@ async function main() {
   for (let i = 0; i < livePhotos.length; i++) {
     const livePhoto = livePhotos[i]
 
+    if (!livePhoto.photo || !livePhoto.video) {
+      console.log('Incomplete live photo...', livePhoto)
+      continue
+    }
+
     const dateTimeOriginal = await getExiftoolValue(
       'DateTimeOriginal',
       dir + '/' + livePhoto.photo,

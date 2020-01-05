@@ -10,7 +10,7 @@ async function getLivePhotos(dir) {
     '-T',
     '-FileName',
     '-ContentIdentifier',
-    path.join(dir, '*'),
+    path.join(dir),
   ]
 
   const { stdout } = await exec(cmdArgs.join(' '))
