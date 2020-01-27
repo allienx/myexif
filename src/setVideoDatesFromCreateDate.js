@@ -2,7 +2,6 @@
 
 const path = require('path')
 
-const last = require('lodash/last')
 const { DateTime } = require('luxon')
 
 const { exec } = require('./util/promises/child_process')
@@ -14,7 +13,7 @@ args.shift()
 args.shift()
 
 const zone = args[0]
-const dir = last(args) || '.'
+const dir = args[1] || '.'
 
 main()
   .catch(err => {
@@ -50,6 +49,7 @@ async function main() {
     const cmdArgs = [
       'exiftool',
       '-preserve',
+      '-overwrite_original',
       `'-File:FileModifyDate=${zoneFormat}'`,
       `'-QuickTime:CreateDate=${utcFormat}'`,
       `'-QuickTime:ModifyDate=${utcFormat}'`,

@@ -60,6 +60,7 @@ async function main() {
     const cmdArgs = [
       'exiftool',
       '-preserve',
+      '-overwrite_original',
       `'-File:FileModifyDate=${zoneFormat}'`,
       `'-QuickTime:CreateDate=${utcFormat}'`,
       `'-QuickTime:ModifyDate=${utcFormat}'`,
