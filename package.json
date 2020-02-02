@@ -1,12 +1,17 @@
 {
-  "name": "photo-organization",
-  "version": "1.0.0",
-  "description": "A collection of scripts to help organize photos by their EXIF datetime metadata.",
+  "name": "organize",
+  "version": "0.0.1",
+  "description": "Scripts to help organize photos by their EXIF metadata.",
   "author": "Alex Lin",
   "license": "MIT",
+  "scripts": {
+    "prettier": "prettier --write 'src/**/*.js'"
+  },
   "dependencies": {
     "lodash": "^4.17.15",
-    "luxon": "^1.21.3",
+    "luxon": "^1.22.0"
+  },
+  "devDependencies": {
     "prettier": "^1.19.1"
   }
 }
