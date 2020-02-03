@@ -34,57 +34,57 @@ async function all({ dir }) {
   const liveCount = await livePhotos({ dir, newDir })
   await mv(path.join(newDir, '*.{jpg,heic}'), path.join(newDir, 'jpg'))
   await mv(path.join(newDir, '*.mov'), path.join(newDir, 'mov'))
-  const livePhotoCount = await organizePhotos(path.join(newDir, 'jpg'))
-  const liveVideoCount = await organizeVideos(path.join(newDir, 'mov'))
+  const livePhotoCount = await organizePhotos(path.join(newDir, 'jpg', '*'))
+  const liveVideoCount = await organizeVideos(path.join(newDir, 'mov', '*'))
   log(`${liveCount} live photos organized.`)
   log(`   ${livePhotoCount} live pictures organized.`)
   log(`   ${liveVideoCount} live videos organized.`)
 
   // Handle .jpg files.
   const jpgCount = await mv(path.join(dir, '*.jpg'), path.join(dir, 'jpg'))
-  await organizePhotos(path.join(dir, 'jpg'))
+  await organizePhotos(path.join(dir, 'jpg', '*'))
   log(`${jpgCount} jpg files organized.`)
 
   // Handle .heic files.
   const heicCount = await mv(path.join(dir, '*.heic'), path.join(dir, 'heic'))
-  await organizePhotos(path.join(dir, 'heic'))
+  await organizePhotos(path.join(dir, 'heic', '*'))
   log(`${heicCount} heic files organized.`)
 
   // Handle .png files.
   const pngCount = await mv(path.join(dir, '*.png'), path.join(dir, 'png'))
-  await organizePng(path.join(dir, 'png'))
+  await organizePng(path.join(dir, 'png', '*'))
   log(`${pngCount} png files organized.`)
 
   // Handle .mov files.
   const movCount = await mv(path.join(dir, '*.mov'), path.join(dir, 'mov'))
-  await organizeVideos(path.join(dir, 'mov'))
+  await organizeVideos(path.join(dir, 'mov', '*'))
   log(`${movCount} mov files organized.`)
 
   // Handle .mp4 files.
   const mp4Count = await mv(path.join(dir, '*.mp4'), path.join(dir, 'mp4'))
-  await organizeVideos(path.join(dir, 'mp4'))
+  await organizeVideos(path.join(dir, 'mp4', '*'))
   log(`${mp4Count} mp4 files organized.`)
 }
 
-async function organizePhotos(dir) {
+async function organizePhotos(pattern) {
   return await exif({
-    dirs: [dir],
-    tagName: 'EXIF:DateTimeOriginal',
+    pattern,
+    tag: 'EXIF:DateTimeOriginal',
   })
 }
 
-async function organizePng(dir) {
+async function organizePng(pattern) {
   return await exif({
-    dirs: [dir],
-    tagName: 'XMP:DateCreated',
+    pattern,
+    tag: 'XMP:DateCreated',
     setAllDates: true,
   })
 }
 
-async function organizeVideos(dir) {
+async function organizeVideos(pattern) {
   return await exif({
-    dirs: [dir],
-    tagName: 'QuickTime:CreationDate',
+    pattern,
+    tag: 'QuickTime:CreationDate',
   })
 }
 

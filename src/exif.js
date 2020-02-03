@@ -8,31 +8,29 @@ module.exports = {
   exif,
 }
 
-async function exif({ dirs, tagName, setAllDates }) {
-  if (!Array.isArray(dirs)) {
-    dirs = [dirs]
-  }
+async function exif({ pattern, tag, setAllDates }) {
+  const patterns = !Array.isArray(pattern) ? [pattern] : pattern
 
   let total = 0
 
-  await forEach(dirs, async dir => {
-    const files = await glob(dir)
+  await forEach(patterns, async ptrn => {
+    const files = await glob(ptrn)
 
     if (files.length === 0) {
       return
     }
 
+    const { dir } = path.parse(ptrn)
     const missing = path.join(dir, 'missing')
-    const pattern = path.join(dir, '*')
 
-    // Move files missing tagName.
+    // Move files missing tag.
     await safeExec(
       [
         'exiftool -preserve',
         `'-Directory=${missing}'`,
         '-if',
-        `'(not $${tagName})'`,
-        pattern,
+        `'(not $${tag})'`,
+        ptrn,
       ].join(' '),
     )
 
@@ -40,20 +38,20 @@ async function exif({ dirs, tagName, setAllDates }) {
       await safeExec(
         [
           'exiftool -preserve -overwrite_original',
-          `-AllDates<${tagName}`,
-          pattern,
+          `-AllDates<${tag}`,
+          ptrn,
         ].join(' '),
       )
     }
 
-    // Rename files based on tagName.
+    // Rename files based on tag.
     await safeExec(
       [
         'exiftool -preserve',
-        `'-FileName<${tagName}'`,
+        `'-FileName<${tag}'`,
         '-d',
         "'/Users/alin/Pictures/OrganizedPhotos/%Y/%m-%b/%Y-%m-%d_%H-%M-%S_%%f.%%e'",
-        pattern,
+        ptrn,
       ].join(' '),
     )
 

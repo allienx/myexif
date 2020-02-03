@@ -9,12 +9,12 @@ module.exports = {
   setVideoDates,
 }
 
-async function setVideoDates({ dir, timezone }) {
+async function setVideoDates({ pattern, timezone }) {
   if (!timezone) {
     throw new Error('Missing timezone...')
   }
 
-  const files = await glob(dir)
+  const files = await glob(pattern)
 
   if (files.length === 0) {
     return 0

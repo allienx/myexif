@@ -19,10 +19,10 @@ program
   })
 
 program
-  .command('exif <dir> <tag>')
+  .command('exif <pattern> <tag>')
   .description('re-organize matching files by the specified tag')
-  .action(async (dir, tag) => {
-    await exif({ dirs: [dir], tagName: tag })
+  .action(async (pattern, tag) => {
+    await exif({ pattern, tag })
   })
 
 program
@@ -35,8 +35,8 @@ program
 program
   .command('set-video-dates <dir> <timezone>')
   .description('set video dates relative to the specified timezone')
-  .action(async (dir, timezone) => {
-    await setVideoDates({ dir, timezone })
+  .action(async (pattern, timezone) => {
+    await setVideoDates({ pattern, timezone })
   })
 
 const start = Date.now()
