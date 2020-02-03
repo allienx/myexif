@@ -2,7 +2,9 @@ const path = require('path')
 
 const { exec } = require('./promises/child_process')
 
-module.exports = getLivePhotos
+module.exports = {
+  getLivePhotos,
+}
 
 async function getLivePhotos(dir) {
   const cmdArgs = [

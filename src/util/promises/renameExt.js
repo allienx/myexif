@@ -12,7 +12,7 @@ async function renameExt(pattern, ext) {
   const files = await glob(pattern)
 
   if (!ext) {
-    throw new Error(`Missing new file extension...`)
+    throw new Error(`Missing file extension...`)
   }
 
   if (files.length === 0) {

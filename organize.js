@@ -5,6 +5,7 @@ const program = require('commander')
 const { all } = require('./src/all')
 const { exif } = require('./src/exif')
 const { livePhotos } = require('./src/livePhotos')
+const { setVideoDates } = require('./src/setVideoDates')
 
 program
   .version('0.0.1')
@@ -29,6 +30,13 @@ program
   .description('move live photos (and their videos) into a live-photos/ dir')
   .action(async dir => {
     await livePhotos({ dir })
+  })
+
+program
+  .command('set-video-dates <dir> <timezone>')
+  .description('set video dates relative to the specified timezone')
+  .action(async (dir, timezone) => {
+    await setVideoDates({ dir, timezone })
   })
 
 const start = Date.now()

@@ -2,8 +2,8 @@ const path = require('path')
 
 const { DateTime } = require('luxon')
 
-const getExiftoolValue = require('./util/getExiftoolValue')
-const getLivePhotos = require('./util/getLivePhotos')
+const { getExiftoolValue } = require('./util/getExiftoolValue')
+const { getLivePhotos } = require('./util/getLivePhotos')
 const { forEach } = require('./util/promises/forEach')
 const { mkdir, rename } = require('./util/promises/fs')
 
