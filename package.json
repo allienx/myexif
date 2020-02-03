@@ -4,6 +4,10 @@
   "description": "Scripts to help organize photos by their EXIF metadata.",
   "author": "Alex Lin",
   "license": "MIT",
+  "main": "organize.js",
+  "bin": {
+    "organize": "organize.js"
+  },
   "scripts": {
     "prettier": "prettier --write 'src/**/*.js'"
   },
