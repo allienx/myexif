@@ -30,15 +30,8 @@ async function all({ dir }) {
   log(`${fileCount} files renamed (lower case with no whitespace).`)
 
   // Move and rename live photos (with their videos).
-  const newDir = path.join(dir, 'live')
-  const liveCount = await livePhotos({ dir, newDir })
-  await mv(path.join(newDir, '*.{jpg,heic}'), path.join(newDir, 'jpg'))
-  await mv(path.join(newDir, '*.mov'), path.join(newDir, 'mov'))
-  const livePhotoCount = await organizePhotos(path.join(newDir, 'jpg', '*'))
-  const liveVideoCount = await organizeVideos(path.join(newDir, 'mov', '*'))
+  const liveCount = await livePhotos({ dir, exif: true })
   log(`${liveCount} live photos organized.`)
-  log(`   ${livePhotoCount} live pictures organized.`)
-  log(`   ${liveVideoCount} live videos organized.`)
 
   // Handle .jpg files.
   const jpgCount = await mv(path.join(dir, '*.jpg'), path.join(dir, 'jpg'))

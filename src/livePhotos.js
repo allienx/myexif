@@ -11,18 +11,25 @@ module.exports = {
   livePhotos,
 }
 
-async function livePhotos({ dir, newDir }) {
+async function livePhotos({ dir, exif }) {
   const livePhotos = await getLivePhotos(dir)
 
   if (livePhotos.length === 0) {
     return 0
   }
 
-  await mkdir(newDir, { recursive: true })
+  if (!exif) {
+    livePhotos.forEach(livePhoto => {
+      console.log(livePhoto)
+    })
 
+    return livePhotos.length
+  }
+
+  // Organize and rename the live photos by EXIF data.
   await forEach(livePhotos, async livePhoto => {
     if (!livePhoto.photo || !livePhoto.video) {
-      await missingLivePhoto(dir, newDir, livePhoto)
+      await moveMissingLivePhoto(dir, livePhoto)
 
       return
     }
@@ -35,36 +42,45 @@ async function livePhotos({ dir, newDir }) {
       path.join(dir, livePhoto.photo),
     )
     const dt = DateTime.fromFormat(dateTimeOriginal, 'yyyy:MM:dd HH:mm:ss')
-    const fmt = dt.toFormat('yyyy-MM-dd_HH-mm-ss')
+    const year = dt.toFormat('yyyy')
+    const month = dt.toFormat('MM-MMM')
+    const timestamp = dt.toFormat('yyyy-MM-dd_HH-mm-ss')
 
-    // Give the live photo files the same name with their respective extensions.
+    const dest = path.join('/Users/alin/Pictures/OrganizedPhotos', year, month)
+    await mkdir(dest, { recursive: true })
+
+    // Rename the photo file by timestamp.
     await rename(
       path.join(dir, livePhoto.photo),
-      path.join(newDir, `${fmt}_${photoName}${photoExt}`),
+      path.join(dest, `${timestamp}_${photoName}${photoExt}`),
     )
+
+    // Use the same timestamp to rename the video file.
     await rename(
       path.join(dir, livePhoto.video),
-      path.join(newDir, `${fmt}_${photoName}${videoExt}`),
+      path.join(dest, `${timestamp}_${photoName}${videoExt}`),
     )
   })
 
   return livePhotos.length
 }
 
-async function missingLivePhoto(dir, newDir, livePhoto) {
-  await mkdir(path.join(newDir, 'missing'), { recursive: true })
+async function moveMissingLivePhoto(dir, livePhoto) {
+  const missingDir = path.join(dir, 'live', 'missing')
+
+  await mkdir(missingDir, { recursive: true })
 
   if (livePhoto.photo) {
     await rename(
       path.join(dir, livePhoto.photo),
-      path.join(newDir, 'missing', livePhoto.photo),
+      path.join(missingDir, livePhoto.photo),
     )
   }
 
   if (livePhoto.video) {
     await rename(
       path.join(dir, livePhoto.video),
-      path.join(newDir, 'missing', livePhoto.video),
+      path.join(missingDir, livePhoto.video),
     )
   }
 }

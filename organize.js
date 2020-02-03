@@ -29,9 +29,18 @@ program
 
 program
   .command('live-photos <dir>')
-  .description('move live photos (and their videos) into a live-photos/ dir')
-  .action(async dir => {
-    await livePhotos({ dir })
+  .description('prints each live photo pair to the console')
+  .option('--exif', 'organizes the files by the photo timestamp instead', false)
+  .action(async (dir, program) => {
+    const { exif } = program
+
+    const count = await livePhotos({ dir, exif })
+
+    if (!exif) {
+      console.log()
+    }
+
+    console.log(`${count} live photos found.`)
   })
 
 program
