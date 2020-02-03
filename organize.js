@@ -22,7 +22,9 @@ program
   .command('exif <pattern> <tag>')
   .description('re-organize matching files by the specified tag')
   .action(async (pattern, tag) => {
-    await exif({ pattern, tag })
+    const count = await exif({ pattern, tag })
+
+    console.log(`${count} files organized.`)
   })
 
 program
@@ -36,7 +38,9 @@ program
   .command('set-video-dates <dir> <timezone>')
   .description('set video dates relative to the specified timezone')
   .action(async (pattern, timezone) => {
-    await setVideoDates({ pattern, timezone })
+    const count = await setVideoDates({ pattern, timezone })
+
+    console.log(`${count} videos updated.`)
   })
 
 const start = Date.now()

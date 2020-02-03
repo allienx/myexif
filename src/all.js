@@ -27,7 +27,7 @@ async function all({ dir }) {
 
   // Rename all photo/video files lower, kebab case.
   const fileCount = await renameFile(path.join(dir, '*'), transformFilename)
-  log(`${fileCount} files renamed consistently.`)
+  log(`${fileCount} files renamed (lower case with no whitespace).`)
 
   // Move and rename live photos (with their videos).
   const newDir = path.join(dir, 'live')
