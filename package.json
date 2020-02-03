@@ -8,6 +8,8 @@
     "prettier": "prettier --write 'src/**/*.js'"
   },
   "dependencies": {
+    "commander": "^5.0.0-0",
+    "glob": "^7.1.6",
     "lodash": "^4.17.15",
     "luxon": "^1.22.0"
   },
