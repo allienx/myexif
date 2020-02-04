@@ -22,7 +22,7 @@ async function all({ dir }) {
   await exec(['find', dir, '-type f -exec chmod 644 {} \\;'].join(' '))
 
   // Use consistent .jpg file extension.
-  const jpegCount = await renameExt(path.join(dir, '*.{jpeg,JPEG,JPG}'), 'jpg')
+  const jpegCount = await renameExt(path.join(dir, '*.{jpeg,JPEG}'), 'jpg')
   log(`${jpegCount} jpeg files renamed with jpg.`)
 
   // Rename all photo/video files lower, kebab case.

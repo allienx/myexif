@@ -22,8 +22,9 @@ async function renameFile(pattern, transform) {
   await forEach(files, async file => {
     const { dir, ext, name } = path.parse(file)
     const newName = transform(name)
+    const newExt = ext.toLowerCase()
 
-    await rename(file, path.join(dir, `${newName}${ext}`))
+    await rename(file, path.join(dir, `${newName}${newExt}`))
   })
 
   return files.length
