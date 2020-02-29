@@ -44,7 +44,7 @@ program
   })
 
 program
-  .command('set-video-dates <dir> <timezone>')
+  .command('set-video-dates <pattern> <timezone>')
   .description('set video dates relative to the specified timezone')
   .action(async (pattern, timezone) => {
     const count = await setVideoDates({ pattern, timezone })
