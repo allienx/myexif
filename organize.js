@@ -5,7 +5,8 @@ const program = require('commander')
 const { all } = require('./src/all')
 const { exif } = require('./src/exif')
 const { livePhotos } = require('./src/livePhotos')
-const { setVideoDates } = require('./src/setVideoDates')
+const { setPermissions } = require('./src/setPermissions')
+const { setVideoTimezone } = require('./src/setVideoTimezone')
 
 program
   .version('0.0.1')
@@ -31,8 +32,8 @@ program
   .command('live-photos <dir>')
   .description('prints each live photo pair to the console')
   .option('--exif', 'organizes the files by the photo timestamp instead', false)
-  .action(async (dir, program) => {
-    const { exif } = program
+  .action(async (dir, opts) => {
+    const { exif } = opts
 
     const count = await livePhotos({ dir, exif })
 
@@ -44,10 +45,29 @@ program
   })
 
 program
-  .command('set-video-dates <pattern> <timezone>')
+  .command('set-permissions <pattern>')
+  .description('set permissions for the matching files')
+  .action(async pattern => {
+    const count = await setPermissions({ pattern })
+
+    console.log(`${count} files updated.`)
+  })
+
+program
+  .command('set-video-timezone <pattern>')
+  .option('--use-create-date <tzname>', 'Base dates off CreateDate', 'utc')
+  .option('--use-file-modify-date', 'Base dates off FileModifyDate', false)
+  .option('-t, --timezone <name>', 'Set dates relative to timezone', 'local')
   .description('set video dates relative to the specified timezone')
-  .action(async (pattern, timezone) => {
-    const count = await setVideoDates({ pattern, timezone })
+  .action(async (pattern, opts) => {
+    const { useCreateDate, useFileModifyDate, timezone } = opts
+
+    const count = await setVideoTimezone({
+      pattern,
+      useCreateDate,
+      useFileModifyDate,
+      timezone,
+    })
 
     console.log(`${count} videos updated.`)
   })
