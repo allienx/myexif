@@ -15,10 +15,10 @@ brace-expansion@^1.1.7:
     balanced-match "^1.0.0"
     concat-map "0.0.1"
 
-commander@^5.0.0-0:
-  version "5.0.0-0"
-  resolved "https://registry.yarnpkg.com/commander/-/commander-5.0.0-0.tgz#22c4588cb45740cbaa27bf8163f2327a2c126a75"
-  integrity sha512-LLP9hLsnl19X3DTYAZ72b5ZFxsaDNw31FZPxaJHefhat7BSjA4O7L3xFy8AuOBTt6AfOZlNYsEgzYJBE/KRV2A==
+commander@^5.0.0:
+  version "5.0.0"
+  resolved "https://registry.yarnpkg.com/commander/-/commander-5.0.0.tgz#dbf1909b49e5044f8fdaf0adc809f0c0722bdfd0"
+  integrity sha512-JrDGPAKjMGSP1G0DUoaceEJ3DZgAfr/q6X7FVk4+U5KxUSKviYGM2k6zWkfyyBHy5rAtzgYJFa1ro2O9PtoxwQ==
 
 concat-map@0.0.1:
   version "0.0.1"
