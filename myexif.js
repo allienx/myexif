@@ -7,7 +7,7 @@ const { exif } = require('./src/exif')
 const { livePhotos } = require('./src/livePhotos')
 const { normalize } = require('./src/normalize')
 const { setPermissions } = require('./src/setPermissions')
-const { setVideoTimezone } = require('./src/setVideoTimezone')
+const { setVideoDates } = require('./src/setVideoDates')
 const { updateTimezone } = require('./src/updateTimezone')
 
 program
@@ -82,34 +82,29 @@ program
   })
 
 program
-  .command('set-video-timezone <pattern>')
-  .option(
-    '--use-create-date <tzname>',
-    'base dates off of QuickTime:CreateDate exif tag',
-    'utc',
+  .command('set-video-dates <filenames...>')
+  .description(
+    'Set values for video dates based on the QuickTime:CreateDate EXIF tag (assumed to be UTC).',
   )
   .option(
-    '--use-file-modify-date',
-    'base dates off of File:FileModifyDate exif tag',
+    '-d, --dry-run',
+    'log exiftool commands without performing any actions',
     false,
   )
-  .option(
-    '-t, --timezone <name>',
-    'set dates relative to the specified timezone',
-    'local',
+  .requiredOption(
+    '-t, --timezone <timezone>',
+    'set the QuickTime:CreationDate EXIF tag relative to this timezone',
   )
-  .description('Set video dates relative to the specified timezone.')
-  .action(async (pattern, opts) => {
-    const { useCreateDate, useFileModifyDate, timezone } = opts
+  .action(async (filenames, opts) => {
+    const { dryRun, timezone } = opts
 
-    const count = await setVideoTimezone({
-      pattern,
-      useCreateDate,
-      useFileModifyDate,
+    const count = setVideoDates({
+      dryRun,
+      filenames,
       timezone,
     })
 
-    console.log(`${count} videos updated.`)
+    console.log(`\n${count} files updated.`)
   })
 
 program
