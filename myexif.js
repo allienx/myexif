@@ -18,10 +18,10 @@ program
     'Normalize filenames using lowercase and dashes. Uses consistent .jpg extension.',
   )
   .option('--dry-run', 'log new file names without performing actions', false)
-  .action(async (filenames, opts) => {
+  .action((filenames, opts) => {
     const { dryRun } = opts
 
-    const count = normalize({ dryRun, filenames })
+    const count = normalize({ filenames, dryRun })
 
     console.log(`\n${count} files updated.`)
   })
@@ -38,10 +38,10 @@ program
     '-d, --dest <dir>',
     'the destination directory to move the files into',
   )
-  .action(async (filenames, opts) => {
+  .action((filenames, opts) => {
     const { dryRun, dest } = opts
 
-    const count = organize({ dryRun, filenames, dest })
+    const count = organize({ filenames, dryRun, dest })
 
     console.log(`\n${count} files updated.`)
   })
@@ -51,10 +51,10 @@ program
   .description('Set permissions (chmod) for the matching files.')
   .option('--dry-run', 'log new permissions without performing actions', false)
   .option('-m, --mode <mode>', 'new permissions as octal string', '644')
-  .action(async (filenames, opts) => {
+  .action((filenames, opts) => {
     const { dryRun, mode } = opts
 
-    const count = setPermissions({ dryRun, filenames, mode })
+    const count = setPermissions({ filenames, dryRun, mode })
 
     console.log(`\n${count} files updated.`)
   })
@@ -73,14 +73,10 @@ program
     '-t, --timezone <timezone>',
     'set the QuickTime:CreationDate EXIF tag relative to this timezone',
   )
-  .action(async (filenames, opts) => {
+  .action((filenames, opts) => {
     const { dryRun, timezone } = opts
 
-    const count = setVideoDates({
-      dryRun,
-      filenames,
-      timezone,
-    })
+    const count = setVideoDates({ filenames, dryRun, timezone })
 
     console.log(`\n${count} files updated.`)
   })
@@ -109,12 +105,12 @@ program
     '-n, --new-timezone <timezone>',
     'set the EXIF tag value relative to this timezone',
   )
-  .action(async (filenames, opts) => {
+  .action((filenames, opts) => {
     const { dryRun, tag, srcTimezone, newTimezone } = opts
 
     const count = updateTimezone({
-      dryRun,
       filenames,
+      dryRun,
       tag,
       srcTimezone,
       newTimezone,
@@ -125,15 +121,10 @@ program
 
 const start = Date.now()
 
-program
-  .parseAsync(process.argv)
-  .catch(err => {
-    console.log(err)
-  })
-  .finally(() => {
-    const end = Date.now()
-    const seconds = (end - start) / 1000
-    const rounded = seconds.toFixed(2)
+program.parse(process.argv)
 
-    console.log(`\n✨  Done in ${rounded}s.`)
-  })
+const end = Date.now()
+const seconds = (end - start) / 1000
+const rounded = seconds.toFixed(2)
+
+console.log(`\n✨  Done in ${rounded}s.`)

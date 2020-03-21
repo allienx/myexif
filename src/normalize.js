@@ -11,7 +11,7 @@ module.exports = {
   normalize,
 }
 
-function normalize({ dryRun, filenames }) {
+function normalize({ filenames, dryRun }) {
   filenames = Array.isArray(filenames) ? filenames : [filenames]
 
   filenames.forEach(filename => {
@@ -19,7 +19,7 @@ function normalize({ dryRun, filenames }) {
       return
     }
 
-    const { dir, ext, name } = path.parse(filename)
+    const { dir, name, ext } = path.parse(filename)
 
     const newName = transformName(name)
     const newExt = transformExtention(ext)

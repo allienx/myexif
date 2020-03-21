@@ -6,7 +6,7 @@ module.exports = {
   setPermissions,
 }
 
-function setPermissions({ dryRun, filenames, mode }) {
+function setPermissions({ filenames, dryRun, mode }) {
   filenames.forEach(filename => {
     if (!isFile(filename)) {
       return

@@ -8,11 +8,11 @@ module.exports = {
   updateTimezone,
 }
 
-function updateTimezone({ dryRun, filenames, tag, srcTimezone, newTimezone }) {
+function updateTimezone({ filenames, dryRun, tag, srcTimezone, newTimezone }) {
   const fmt = 'yyyy:MM:dd HH:mm:ss'
 
   filenames.forEach(filename => {
-    const value = getExifTagValue(tag, filename)
+    const value = getExifTagValue(filename, tag)
 
     const dt = DateTime.fromFormat(value, fmt, {
       zone: srcTimezone,

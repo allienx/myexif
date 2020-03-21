@@ -8,9 +8,9 @@ module.exports = {
   setVideoDates,
 }
 
-function setVideoDates({ dryRun, filenames, timezone }) {
+function setVideoDates({ filenames, dryRun, timezone }) {
   filenames.forEach(filename => {
-    const value = getExifTagValue('QuickTime:CreateDate', filename)
+    const value = getExifTagValue(filename, 'QuickTime:CreateDate')
 
     const dt = DateTime.fromFormat(value, 'yyyy:MM:dd HH:mm:ss', {
       zone: 'Etc/UTC',

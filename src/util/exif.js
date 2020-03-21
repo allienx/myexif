@@ -4,7 +4,7 @@ module.exports = {
   getExifTagValue,
 }
 
-function getExifTagValue(tag, filename) {
+function getExifTagValue(filename, tag) {
   const commandArgs = ['exiftool', '-T', `-${tag}`, `"${filename}"`]
   const command = commandArgs.join(' ')
 

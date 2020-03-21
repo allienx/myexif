@@ -10,7 +10,7 @@ module.exports = {
   organize,
 }
 
-function organize({ dryRun, filenames, dest }) {
+function organize({ filenames, dryRun, dest }) {
   filenames.forEach(filename => {
     const { ext } = path.parse(filename)
 
@@ -21,7 +21,7 @@ function organize({ dryRun, filenames, dest }) {
       return
     }
 
-    const value = getExifTagValue(tag, filename)
+    const value = getExifTagValue(filename, tag)
 
     if (value === '-') {
       return
@@ -76,7 +76,7 @@ function moveFile({ filename, value, dryRun, dest }) {
   const date = dt.toFormat('yyyy-MM-dd')
   const time = dt.toFormat('HH-mm-ss')
 
-  const { ext, name } = path.parse(filename)
+  const { name, ext } = path.parse(filename)
 
   const newFilename = path.join(
     dest,
