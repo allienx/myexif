@@ -1,12 +1,12 @@
 {
-  "name": "organize",
+  "name": "myexif",
   "version": "0.0.1",
-  "description": "Scripts to help organize photos by their EXIF metadata.",
+  "description": "Scripts to help organize photos and videos by their EXIF metadata.",
   "author": "Alex Lin",
   "license": "MIT",
-  "main": "organize.js",
+  "main": "myexif.js",
   "bin": {
-    "organize": "organize.js"
+    "myexif": "myexif.js"
   },
   "scripts": {
     "prettier": "prettier --write 'src/**/*.js'"

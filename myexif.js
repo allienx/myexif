@@ -14,14 +14,14 @@ program
 
 program
   .command('all <dir>')
-  .description('organize all photos and videos in <dir>')
+  .description('Organize all photos and videos in <dir>.')
   .action(async dir => {
     await all({ dir })
   })
 
 program
   .command('exif <pattern> <tag>')
-  .description('re-organize matching files by the specified tag')
+  .description('Re-organize matching files by the specified tag.')
   .action(async (pattern, tag) => {
     const count = await exif({ pattern, tag })
 
@@ -31,7 +31,11 @@ program
 program
   .command('live-photos <dir>')
   .description('prints each live photo pair to the console')
-  .option('--exif', 'organizes the files by the photo timestamp instead', false)
+  .option(
+    '--exif',
+    'Organizes the files by the photo timestamp instead.',
+    false,
+  )
   .action(async (dir, opts) => {
     const { exif } = opts
 
@@ -46,7 +50,7 @@ program
 
 program
   .command('set-permissions <pattern>')
-  .description('set permissions for the matching files')
+  .description('Set permissions (chmod) for the matching files.')
   .action(async pattern => {
     const count = await setPermissions({ pattern })
 
@@ -58,7 +62,7 @@ program
   .option('--use-create-date <tzname>', 'Base dates off CreateDate', 'utc')
   .option('--use-file-modify-date', 'Base dates off FileModifyDate', false)
   .option('-t, --timezone <name>', 'Set dates relative to timezone', 'local')
-  .description('set video dates relative to the specified timezone')
+  .description('Set video dates relative to the specified timezone.')
   .action(async (pattern, opts) => {
     const { useCreateDate, useFileModifyDate, timezone } = opts
 
