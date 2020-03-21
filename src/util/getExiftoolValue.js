@@ -1,13 +1,14 @@
-const { exec } = require('./promises/child_process')
+const { execSync } = require('child_process')
 
 module.exports = {
   getExiftoolValue,
 }
 
-async function getExiftoolValue(tag, path) {
-  const cmdArgs = ['exiftool', '-T', `-${tag}`, path]
+function getExiftoolValue(tag, filename) {
+  const commandArgs = ['exiftool', '-T', `-${tag}`, `"${filename}"`]
+  const command = commandArgs.join(' ')
 
-  const { stdout } = await exec(cmdArgs.join(' '))
+  const stdout = execSync(command, { encoding: 'utf8' })
 
   return stdout.trim()
 }

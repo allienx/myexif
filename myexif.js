@@ -8,6 +8,7 @@ const { livePhotos } = require('./src/livePhotos')
 const { normalize } = require('./src/normalize')
 const { setPermissions } = require('./src/setPermissions')
 const { setVideoTimezone } = require('./src/setVideoTimezone')
+const { updateTimezone } = require('./src/updateTimezone')
 
 program
   .version('0.0.1')
@@ -109,6 +110,44 @@ program
     })
 
     console.log(`${count} videos updated.`)
+  })
+
+program
+  .command('update-timezone <filenames...>')
+  .description(
+    'Updates the timezone of the specified EXIF tag for all filenames.',
+  )
+  .option(
+    '-d, --dry-run',
+    'log exiftool commands without performing any actions',
+    false,
+  )
+  .option(
+    '-t, --tag <tag>',
+    'name of the EXIF tag to update',
+    'QuickTime:CreateDate',
+  )
+  .option(
+    '-s, --src-timezone <timezone>',
+    'parse the EXIF tag value relative to this timezone',
+    'Etc/UTC',
+  )
+  .requiredOption(
+    '-n, --new-timezone <timezone>',
+    'set the EXIF tag value relative to this timezone',
+  )
+  .action(async (filenames, opts) => {
+    const { dryRun, tag, srcTimezone, newTimezone } = opts
+
+    const count = updateTimezone({
+      dryRun,
+      filenames,
+      tag,
+      srcTimezone,
+      newTimezone,
+    })
+
+    console.log(`\n${count} files updated.`)
   })
 
 const start = Date.now()
