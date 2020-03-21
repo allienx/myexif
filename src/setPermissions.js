@@ -1,23 +1,21 @@
-const { forEach } = require('./util/promises/forEach')
-const { chmod, stat } = require('./util/promises/fs')
-const { glob } = require('./util/promises/glob')
+const { chmodSync } = require('fs')
+
+const { isFile } = require('./util/isFile')
 
 module.exports = {
   setPermissions,
 }
 
-async function setPermissions({ pattern }) {
-  const filenames = await glob(pattern)
+function setPermissions({ dryRun, filenames, mode }) {
+  filenames.forEach(filename => {
+    if (!isFile(filename)) {
+      return
+    }
 
-  if (filenames.length === 0) {
-    return 0
-  }
+    console.log(`chmod ${mode} ${filename}`)
 
-  await forEach(filenames, async filename => {
-    const stats = await stat(filename)
-
-    if (stats.isFile()) {
-      await chmod(filename, 0o644)
+    if (!dryRun) {
+      chmodSync(filename, mode)
     }
   })
 

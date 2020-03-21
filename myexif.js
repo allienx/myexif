@@ -31,12 +31,8 @@ program
 
 program
   .command('live-photos <dir>')
-  .description('prints each live photo pair to the console')
-  .option(
-    '--exif',
-    'Organizes the files by the photo timestamp instead.',
-    false,
-  )
+  .description('Prints each live photo pair to the console.')
+  .option('--exif', 'organizes the files by the photo timestamp instead', false)
   .action(async (dir, opts) => {
     const { exif } = opts
 
@@ -51,13 +47,13 @@ program
 
 program
   .command('normalize <filenames...>')
-  .option(
-    '-d, --dry-run',
-    'Log new file names without performing any actions.',
-    false,
-  )
   .description(
     'Normalize filenames using lowercase and dashes. Uses consistent .jpg extension.',
+  )
+  .option(
+    '-d, --dry-run',
+    'log new file names without performing actions',
+    false,
   )
   .action(async (filenames, opts) => {
     const { dryRun } = opts
@@ -68,29 +64,37 @@ program
   })
 
 program
-  .command('set-permissions <pattern>')
+  .command('set-permissions <filenames...>')
   .description('Set permissions (chmod) for the matching files.')
-  .action(async pattern => {
-    const count = await setPermissions({ pattern })
+  .option(
+    '-d, --dry-run',
+    'log new permissions without performing actions',
+    false,
+  )
+  .option('-m, --mode <mode>', 'new permissions as octal string', '644')
+  .action(async (filenames, opts) => {
+    const { dryRun, mode } = opts
 
-    console.log(`${count} files updated.`)
+    const count = setPermissions({ dryRun, filenames, mode })
+
+    console.log(`\n${count} files updated.`)
   })
 
 program
   .command('set-video-timezone <pattern>')
   .option(
     '--use-create-date <tzname>',
-    'Base dates off of QuickTime:CreateDate exif tag',
+    'base dates off of QuickTime:CreateDate exif tag',
     'utc',
   )
   .option(
     '--use-file-modify-date',
-    'Base dates off of File:FileModifyDate exif tag',
+    'base dates off of File:FileModifyDate exif tag',
     false,
   )
   .option(
     '-t, --timezone <name>',
-    'Set dates relative to the specified timezone',
+    'set dates relative to the specified timezone',
     'local',
   )
   .description('Set video dates relative to the specified timezone.')
