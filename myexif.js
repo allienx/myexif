@@ -5,6 +5,7 @@ const program = require('commander')
 const { all } = require('./src/all')
 const { exif } = require('./src/exif')
 const { livePhotos } = require('./src/livePhotos')
+const { normalize } = require('./src/normalize')
 const { setPermissions } = require('./src/setPermissions')
 const { setVideoTimezone } = require('./src/setVideoTimezone')
 
@@ -49,6 +50,24 @@ program
   })
 
 program
+  .command('normalize <filenames...>')
+  .option(
+    '-d, --dry-run',
+    'Log new file names without performing any actions.',
+    false,
+  )
+  .description(
+    'Normalize filenames using lowercase and dashes. Uses consistent .jpg extension.',
+  )
+  .action(async (filenames, opts) => {
+    const { dryRun } = opts
+
+    const count = normalize({ dryRun, filenames })
+
+    console.log(`\n${count} files updated.`)
+  })
+
+program
   .command('set-permissions <pattern>')
   .description('Set permissions (chmod) for the matching files.')
   .action(async pattern => {
@@ -59,9 +78,21 @@ program
 
 program
   .command('set-video-timezone <pattern>')
-  .option('--use-create-date <tzname>', 'Base dates off CreateDate', 'utc')
-  .option('--use-file-modify-date', 'Base dates off FileModifyDate', false)
-  .option('-t, --timezone <name>', 'Set dates relative to timezone', 'local')
+  .option(
+    '--use-create-date <tzname>',
+    'Base dates off of QuickTime:CreateDate exif tag',
+    'utc',
+  )
+  .option(
+    '--use-file-modify-date',
+    'Base dates off of File:FileModifyDate exif tag',
+    false,
+  )
+  .option(
+    '-t, --timezone <name>',
+    'Set dates relative to the specified timezone',
+    'local',
+  )
   .description('Set video dates relative to the specified timezone.')
   .action(async (pattern, opts) => {
     const { useCreateDate, useFileModifyDate, timezone } = opts
