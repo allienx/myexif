@@ -1,21 +1,20 @@
-const path = require('path')
-
-const { exec } = require('./promises/child_process')
+const { execSync } = require('child_process')
 
 module.exports = {
   getLivePhotos,
 }
 
 async function getLivePhotos(dir) {
-  const cmdArgs = [
+  const commandArgs = [
     'exiftool',
     '-T',
     '-FileName',
     '-ContentIdentifier',
-    path.join(dir),
+    `"${dir}"`,
   ]
+  const command = commandArgs.join(' ')
 
-  const { stdout } = await exec(cmdArgs.join(' '))
+  const stdout = execSync(command, { encoding: 'utf8' })
 
   const livePhotos = {}
 

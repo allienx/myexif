@@ -2,9 +2,6 @@
 
 const program = require('commander')
 
-const { all } = require('./src/all')
-const { exif } = require('./src/exif')
-const { livePhotos } = require('./src/livePhotos')
 const { normalize } = require('./src/normalize')
 const { organize } = require('./src/organize')
 const { setPermissions } = require('./src/setPermissions')
@@ -14,38 +11,6 @@ const { updateTimezone } = require('./src/updateTimezone')
 program
   .version('0.0.1')
   .description('Scripts to help organize photos by their EXIF metadata.')
-
-program
-  .command('all <dir>')
-  .description('Organize all photos and videos in <dir>.')
-  .action(async dir => {
-    await all({ dir })
-  })
-
-program
-  .command('exif <pattern> <tag>')
-  .description('Re-organize matching files by the specified tag.')
-  .action(async (pattern, tag) => {
-    const count = await exif({ pattern, tag })
-
-    console.log(`${count} files organized.`)
-  })
-
-program
-  .command('live-photos <dir>')
-  .description('Prints each live photo pair to the console.')
-  .option('--exif', 'organizes the files by the photo timestamp instead', false)
-  .action(async (dir, opts) => {
-    const { exif } = opts
-
-    const count = await livePhotos({ dir, exif })
-
-    if (!exif) {
-      console.log()
-    }
-
-    console.log(`${count} live photos found.`)
-  })
 
 program
   .command('normalize <filenames...>')

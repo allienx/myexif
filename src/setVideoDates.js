@@ -2,7 +2,7 @@ const { execSync } = require('child_process')
 
 const { DateTime } = require('luxon')
 
-const { getExiftoolValue } = require('./util/getExiftoolValue')
+const { getExifTagValue } = require('./util/exif')
 
 module.exports = {
   setVideoDates,
@@ -10,7 +10,7 @@ module.exports = {
 
 function setVideoDates({ dryRun, filenames, timezone }) {
   filenames.forEach(filename => {
-    const value = getExiftoolValue('QuickTime:CreateDate', filename)
+    const value = getExifTagValue('QuickTime:CreateDate', filename)
 
     const dt = DateTime.fromFormat(value, 'yyyy:MM:dd HH:mm:ss', {
       zone: 'Etc/UTC',
