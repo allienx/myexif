@@ -6,6 +6,7 @@ const { all } = require('./src/all')
 const { exif } = require('./src/exif')
 const { livePhotos } = require('./src/livePhotos')
 const { normalize } = require('./src/normalize')
+const { organize } = require('./src/organize')
 const { setPermissions } = require('./src/setPermissions')
 const { setVideoDates } = require('./src/setVideoDates')
 const { updateTimezone } = require('./src/updateTimezone')
@@ -51,11 +52,7 @@ program
   .description(
     'Normalize filenames using lowercase and dashes. Uses consistent .jpg extension.',
   )
-  .option(
-    '-d, --dry-run',
-    'log new file names without performing actions',
-    false,
-  )
+  .option('--dry-run', 'log new file names without performing actions', false)
   .action(async (filenames, opts) => {
     const { dryRun } = opts
 
@@ -65,13 +62,29 @@ program
   })
 
 program
-  .command('set-permissions <filenames...>')
-  .description('Set permissions (chmod) for the matching files.')
+  .command('organize <filenames...>')
+  .description('Organize filenames based on their EXIF tag values.')
   .option(
-    '-d, --dry-run',
-    'log new permissions without performing actions',
+    '--dry-run',
+    'log exiftool commands without performing any actions',
     false,
   )
+  .requiredOption(
+    '-d, --dest <dir>',
+    'the destination directory to move the files into',
+  )
+  .action(async (filenames, opts) => {
+    const { dryRun, dest } = opts
+
+    const count = organize({ dryRun, filenames, dest })
+
+    console.log(`\n${count} files updated.`)
+  })
+
+program
+  .command('set-permissions <filenames...>')
+  .description('Set permissions (chmod) for the matching files.')
+  .option('--dry-run', 'log new permissions without performing actions', false)
   .option('-m, --mode <mode>', 'new permissions as octal string', '644')
   .action(async (filenames, opts) => {
     const { dryRun, mode } = opts
@@ -87,7 +100,7 @@ program
     'Set values for video dates based on the QuickTime:CreateDate EXIF tag (assumed to be UTC).',
   )
   .option(
-    '-d, --dry-run',
+    '--dry-run',
     'log exiftool commands without performing any actions',
     false,
   )
@@ -113,7 +126,7 @@ program
     'Updates the timezone of the specified EXIF tag for all filenames.',
   )
   .option(
-    '-d, --dry-run',
+    '--dry-run',
     'log exiftool commands without performing any actions',
     false,
   )
