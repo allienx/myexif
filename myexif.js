@@ -2,6 +2,7 @@
 
 const program = require('commander')
 
+const packageJson = require('./package.json')
 const { normalize } = require('./src/normalize')
 const { organize } = require('./src/organize')
 const { setPermissions } = require('./src/setPermissions')
@@ -9,8 +10,9 @@ const { setVideoDates } = require('./src/setVideoDates')
 const { updateTimezone } = require('./src/updateTimezone')
 
 program
-  .version('0.0.1')
-  .description('Scripts to help organize photos by their EXIF metadata.')
+  .name(packageJson.name)
+  .version(packageJson.version)
+  .description(packageJson.description)
 
 program
   .command('normalize <filenames...>')
