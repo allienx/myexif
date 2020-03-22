@@ -45,7 +45,7 @@ Object.defineProperty(r.context, 'scripts', {
   },
 })
 
-Object.defineProperty(r.context, 'util', {
+Object.defineProperty(r.context, 'utils', {
   configurable: false,
   enumerable: true,
   value: {
