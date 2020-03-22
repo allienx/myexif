@@ -25,11 +25,11 @@ function normalize({ filenames, dryRun }) {
     const newExt = transformExtention(ext)
     const newFilename = path.join(dir, `${newName}${newExt}`)
 
+    console.log(`${filename} -> ${newFilename}`)
+
     if (!dryRun) {
       renameSync(filename, newFilename)
     }
-
-    console.log(`${filename} -> ${newFilename}`)
   })
 
   return filenames.length
