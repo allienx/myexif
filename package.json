@@ -9,7 +9,8 @@
     "myexif": "myexif.js"
   },
   "scripts": {
-    "prettier": "prettier --write 'src/**/*.js'"
+    "prettier": "prettier --write 'src/**/*.js'",
+    "repl": "node --experimental-repl-await repl.js"
   },
   "dependencies": {
     "commander": "^5.0.0",
