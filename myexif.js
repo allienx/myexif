@@ -3,6 +3,7 @@
 const program = require('commander')
 
 const packageJson = require('./package.json')
+const { livePhotos } = require('./src/livePhotos')
 const { normalize } = require('./src/normalize')
 const { organize } = require('./src/organize')
 const { setPermissions } = require('./src/setPermissions')
@@ -13,6 +14,28 @@ program
   .name(packageJson.name)
   .version(packageJson.version)
   .description(packageJson.description)
+
+program
+  .command('live-photos <dir>')
+  .description(
+    'Find live photo-video pairs and organize them based on their EXIF tag values.',
+  )
+  .option(
+    '--dry-run',
+    'log live photo-video pairs without performing any actions',
+    false,
+  )
+  .requiredOption(
+    '-d, --dest <dir>',
+    'the destination directory to move the files into',
+  )
+  .action((dir, opts) => {
+    const { dryRun, dest } = opts
+
+    const count = livePhotos({ dir, dryRun, dest })
+
+    console.log(`\n${count} live photos updated.`)
+  })
 
 program
   .command('normalize <filenames...>')

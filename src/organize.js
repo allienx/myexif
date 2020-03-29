@@ -2,9 +2,8 @@ const { execSync } = require('child_process')
 const { mkdirSync, renameSync } = require('fs')
 const path = require('path')
 
-const { DateTime } = require('luxon')
-
-const { getExifTagValue } = require('./util/exif')
+const { getExifTagValue, parseExifDate } = require('./util/exif')
+const { getNewFilename } = require('./util/filename')
 
 module.exports = {
   organize,
@@ -21,9 +20,9 @@ function organize({ filenames, dryRun, dest }) {
       return
     }
 
-    const value = getExifTagValue(filename, tag)
+    const dateStr = getExifTagValue(filename, tag)
 
-    if (value === '-') {
+    if (dateStr === '-') {
       return
     }
 
@@ -31,7 +30,8 @@ function organize({ filenames, dryRun, dest }) {
       setAllDates({ filename, dryRun, tag })
     }
 
-    moveFile({ filename, value, dryRun, dest })
+    const date = parseExifDate(dateStr)
+    moveFile({ filename, date, dryRun, dest })
   })
 
   return filenames.length
@@ -69,37 +69,18 @@ function setAllDates({ filename, dryRun, tag }) {
   }
 }
 
-function moveFile({ filename, value, dryRun, dest }) {
-  const dt = parseTagValue(value)
-  const year = dt.toFormat('yyyy')
-  const month = dt.toFormat('MM-MMM')
-  const date = dt.toFormat('yyyy-MM-dd')
-  const time = dt.toFormat('HH-mm-ss')
-
-  const { name, ext } = path.parse(filename)
-
-  const newFilename = path.join(
+function moveFile({ filename, date, dryRun, dest }) {
+  const { dir: newDir, filename: newFilename } = getNewFilename({
+    filename,
+    date,
     dest,
-    year,
-    month,
-    `${date}_${time}_${name}${ext}`,
-  )
+  })
 
   console.log(`${filename} -> ${newFilename}`)
 
   if (!dryRun) {
-    mkdirSync(path.join(dest, year, month), { recursive: true })
+    mkdirSync(newDir, { recursive: true })
 
     renameSync(filename, newFilename)
   }
-}
-
-function parseTagValue(value) {
-  let dt = DateTime.fromFormat(value, 'yyyy:MM:dd HH:mm:ssZZ')
-
-  if (!dt.isValid) {
-    dt = DateTime.fromFormat(value, 'yyyy:MM:dd HH:mm:ss')
-  }
-
-  return dt
 }
