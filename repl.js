@@ -5,16 +5,18 @@ const repl = require('repl')
 const lodash = require('lodash')
 const { DateTime } = require('luxon')
 
+const { livePhotos } = require('./src/livePhotos')
 const { normalize } = require('./src/normalize')
 const { organize } = require('./src/organize')
 const { setPermissions } = require('./src/setPermissions')
 const { setVideoDates } = require('./src/setVideoDates')
 const { updateTimezone } = require('./src/updateTimezone')
-const { getExifTagValue } = require('./src/util/exif')
-const { getLivePhotos } = require('./src/util/getLivePhotos')
-const { isFile } = require('./src/util/isFile')
+const exifUtils = require('./src/util/exif')
+const filenameUtils = require('./src/util/filename')
+const pathUtils = require('./src/util/path')
 
-console.log(`Custom REPL initialized - ${new Date()}\n`)
+console.log(new Date().toString())
+console.log(`\n=== Custom REPL initialized ===\n`)
 
 const r = repl.start('🔥 > ')
 
@@ -33,10 +35,11 @@ Object.defineProperty(r.context, 'DateTime', {
   value: DateTime,
 })
 
-Object.defineProperty(r.context, 'scripts', {
+Object.defineProperty(r.context, 'actions', {
   configurable: false,
   enumerable: true,
   value: {
+    livePhotos,
     normalize,
     organize,
     setPermissions,
@@ -49,8 +52,8 @@ Object.defineProperty(r.context, 'utils', {
   configurable: false,
   enumerable: true,
   value: {
-    getExifTagValue,
-    getLivePhotos,
-    isFile,
+    exif: exifUtils,
+    filename: filenameUtils,
+    path: pathUtils,
   },
 })
