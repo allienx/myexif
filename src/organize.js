@@ -3,7 +3,7 @@ const { mkdirSync, renameSync } = require('fs')
 const path = require('path')
 
 const { getExifTagValue, parseExifDate } = require('./util/exif')
-const { getNewFilename } = require('./util/filename')
+const { getNewFilename, getNewSidecarFilename } = require('./util/filename')
 
 module.exports = {
   organize,
@@ -12,6 +12,10 @@ module.exports = {
 function organize({ filenames, dryRun, dest }) {
   filenames.forEach(filename => {
     const { ext } = path.parse(filename)
+
+    if (['.aae'].includes(ext)) {
+      return
+    }
 
     const tag = getTag(ext)
 
@@ -57,7 +61,7 @@ function setAllDates({ filename, dryRun, tag }) {
     'exiftool',
     '-preserve',
     '-overwrite_original',
-    `-AllDates<${tag}`,
+    `"-AllDates<${tag}"`,
     `"${filename}"`,
   ]
   const command = commandArgs.join(' ')
@@ -75,12 +79,24 @@ function moveFile({ filename, date, dryRun, dest }) {
     date,
     dest,
   })
+  const { sidecarFilename, newSidecarFilename } = getNewSidecarFilename({
+    filename,
+    newFilename,
+  })
 
   console.log(`${filename} -> ${newFilename}`)
+
+  if (newSidecarFilename) {
+    console.log(`${sidecarFilename} -> ${newSidecarFilename}`)
+  }
 
   if (!dryRun) {
     mkdirSync(newDir, { recursive: true })
 
     renameSync(filename, newFilename)
+
+    if (newSidecarFilename) {
+      renameSync(sidecarFilename, newSidecarFilename)
+    }
   }
 }

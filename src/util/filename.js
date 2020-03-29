@@ -2,8 +2,11 @@ const path = require('path')
 
 const { DateTime } = require('luxon')
 
+const { exists } = require('./path')
+
 module.exports = {
   getNewFilename,
+  getNewSidecarFilename,
 }
 
 function getNewFilename({ filename, date, dest }) {
@@ -13,6 +16,23 @@ function getNewFilename({ filename, date, dest }) {
   return {
     dir: newDir,
     filename: path.join(newDir, newFilename),
+  }
+}
+
+function getNewSidecarFilename({ filename, newFilename }) {
+  const { dir, name } = path.parse(filename)
+  const sidecarFilename = path.join(dir, `${name}.aae`)
+
+  if (!exists(sidecarFilename)) {
+    return {}
+  }
+
+  const { dir: newDir, name: newName } = path.parse(newFilename)
+  const newSidecarFilename = path.join(newDir, `${newName}.aae`)
+
+  return {
+    sidecarFilename,
+    newSidecarFilename,
   }
 }
 

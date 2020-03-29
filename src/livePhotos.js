@@ -2,7 +2,7 @@ const { mkdirSync, renameSync } = require('fs')
 const path = require('path')
 
 const { getExifTags, parseExifDate } = require('./util/exif')
-const { getNewFilename } = require('./util/filename')
+const { getNewFilename, getNewSidecarFilename } = require('./util/filename')
 
 module.exports = {
   livePhotos,
@@ -31,14 +31,27 @@ function livePhotos({ dir, dryRun, dest }) {
       dest,
     })
 
+    const { sidecarFilename, newSidecarFilename } = getNewSidecarFilename({
+      filename: photoFilename,
+      newFilename: newPhotoFilename,
+    })
+
     console.log(`${photoFilename} -> ${newPhotoFilename}`)
     console.log(`${videoFilename} -> ${newVideoFilename}`)
+
+    if (newSidecarFilename) {
+      console.log(`${sidecarFilename} -> ${newSidecarFilename}`)
+    }
 
     if (!dryRun) {
       mkdirSync(newDir, { recursive: true })
 
       renameSync(photoFilename, newPhotoFilename)
       renameSync(videoFilename, newVideoFilename)
+
+      if (newSidecarFilename) {
+        renameSync(sidecarFilename, newSidecarFilename)
+      }
     }
   })
 
