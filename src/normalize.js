@@ -5,7 +5,7 @@ const flow = require('lodash/fp/flow')
 const kebabCase = require('lodash/fp/kebabCase')
 const toLower = require('lodash/fp/toLower')
 
-const { isFile } = require('./util/isFile')
+const { isFile } = require('./util/path')
 
 module.exports = {
   normalize,

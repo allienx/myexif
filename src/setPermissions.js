@@ -1,6 +1,6 @@
 const { chmodSync } = require('fs')
 
-const { isFile } = require('./util/isFile')
+const { isFile } = require('./util/path')
 
 module.exports = {
   setPermissions,
