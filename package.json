@@ -1,12 +1,13 @@
 {
   "name": "myexif",
-  "version": "0.0.1",
+  "version": "0.0.0",
   "description": "Scripts to help organize photos and videos by their EXIF metadata.",
   "author": "Alex Lin",
   "license": "MIT",
   "main": "myexif.js",
   "bin": {
-    "myexif": "myexif.js"
+    "myexif": "myexif.js",
+    "myexif-run-all": "myexif-run-all.js"
   },
   "scripts": {
     "prettier": "prettier --write 'src/**/*.js'",
@@ -14,6 +15,7 @@
   },
   "dependencies": {
     "commander": "^5.0.0",
+    "glob": "^7.1.6",
     "lodash": "^4.17.15",
     "luxon": "^1.22.0"
   },
