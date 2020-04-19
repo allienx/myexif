@@ -14,7 +14,7 @@ module.exports = {
 function normalize({ filenames, dryRun }) {
   filenames = Array.isArray(filenames) ? filenames : [filenames]
 
-  filenames.forEach(filename => {
+  filenames.forEach((filename) => {
     if (!isFile(filename)) {
       return
     }

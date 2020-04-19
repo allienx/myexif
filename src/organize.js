@@ -10,7 +10,7 @@ module.exports = {
 }
 
 function organize({ filenames, dryRun, dest }) {
-  filenames.forEach(filename => {
+  filenames.forEach((filename) => {
     const { ext } = path.parse(filename)
 
     if (['.aae'].includes(ext)) {

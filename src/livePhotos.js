@@ -11,7 +11,7 @@ module.exports = {
 function livePhotos({ dir, dryRun, dest }) {
   const photos = getLivePhotos(dir)
 
-  photos.forEach(livePhoto => {
+  photos.forEach((livePhoto) => {
     if (!livePhoto.isComplete) {
       return
     }
@@ -66,7 +66,7 @@ function getLivePhotos(dir) {
 
   const livePhotos = {}
 
-  exifTags.forEach(exifTag => {
+  exifTags.forEach((exifTag) => {
     const { SourceFile, DateTimeOriginal, ContentIdentifier } = exifTag
 
     if (!ContentIdentifier) {
@@ -89,7 +89,7 @@ function getLivePhotos(dir) {
     }
   })
 
-  return Object.values(livePhotos).map(livePhoto => {
+  return Object.values(livePhotos).map((livePhoto) => {
     const {
       contentIdentifier,
       dateTimeOriginal,
