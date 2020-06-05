@@ -45,6 +45,9 @@ program
     count = livePhotos({ dir, dryRun, dest })
     console.log(`${count} live photos updated.\n`)
 
+    // Re-glob to pick up changes made by livePhotos.
+    filenames = glob.sync(path.join(dir, '*'))
+
     count = organize({ filenames, dryRun, dest })
     console.log(`${count} files updated.`)
   })

@@ -13,6 +13,7 @@ function organize({ filenames, dryRun, dest }) {
   filenames.forEach((filename) => {
     const { ext } = path.parse(filename)
 
+    // Skip sidecar files because they're moved with their main file.
     if (['.aae'].includes(ext)) {
       return
     }
