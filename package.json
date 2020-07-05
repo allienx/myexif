@@ -6,8 +6,7 @@
   "license": "MIT",
   "main": "myexif.js",
   "bin": {
-    "myexif": "myexif.js",
-    "myexif-run-all": "myexif-run-all.js"
+    "myexif": "myexif.js"
   },
   "scripts": {
     "prettier": "prettier --write 'src/**/*.js'",

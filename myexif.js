@@ -1,6 +1,9 @@
 #!/usr/bin/env node
 
+const path = require('path')
+
 const program = require('commander')
+const glob = require('glob')
 
 const packageJson = require('./package.json')
 const { livePhotos } = require('./src/livePhotos')
@@ -14,6 +17,40 @@ program
   .name(packageJson.name)
   .version(packageJson.version)
   .description(packageJson.description)
+
+program
+  .command('run-all <dir> <dest>')
+  .description(
+    'Organizes all photos and videos in <dir> by their date and time into <dest>.',
+  )
+  .option('--dry-run', 'log results without performing any actions', false)
+  .action((dir, dest, opts) => {
+    const { dryRun } = opts
+
+    let filenames = glob.sync(path.join(dir, '*'))
+
+    let count = normalize({ filenames, dryRun })
+    console.log(`${count} files updated.\n`)
+
+    // Re-glob to get normalized filenames.
+    filenames = glob.sync(path.join(dir, '*'))
+
+    count = setPermissions({ filenames, dryRun, mode: '644' })
+    console.log(`${count} files updated.\n`)
+
+    count = livePhotos({ dir, dryRun, dest })
+    console.log(`${count} live photos updated.\n`)
+
+    // Re-glob to pick up changes made by livePhotos.
+    filenames = glob.sync(path.join(dir, '*'))
+
+    count = organize({ filenames, dryRun, dest })
+    console.log(`${count} files updated.`)
+
+    // console.log('dir', dir)
+    // console.log('dest', dest)
+    // console.log('dryRun', dryRun)
+  })
 
 program
   .command('live-photos <dir>')
