@@ -14,7 +14,7 @@ Scripts to help organize photos and videos by their EXIF metadata.
 
 Requires
 
-- [nodejs v10+](https://nodejs.org/)
+- [nodejs v12+](https://nodejs.org/)
 - [exiftool](https://exiftool.org/)
 - [yarn](https://yarnpkg.com/) or [npm](https://www.npmjs.com/)
 
@@ -38,12 +38,40 @@ Options:
   -h, --help                                display help for command
 
 Commands:
+  run-all [options] <dir> <dest>            Organizes all photos and videos in <dir> by their date and time into <dest>.
+  live-photos [options] <dir>               Find live photo-video pairs and organize them based on their EXIF tag values.
   normalize [options] <filenames...>        Normalize filenames using lowercase and dashes. Uses consistent .jpg extension.
   organize [options] <filenames...>         Organize filenames based on their EXIF tag values.
   set-permissions [options] <filenames...>  Set permissions (chmod) for the matching files.
   set-video-dates [options] <filenames...>  Set values for video dates based on the QuickTime:CreateDate EXIF tag (assumed to be UTC).
   update-timezone [options] <filenames...>  Updates the timezone of the specified EXIF tag for all filenames.
   help [command]                            display help for command
+```
+
+
+### run-all
+
+```
+Usage: myexif run-all [options] <dir> <dest>
+
+Organizes all photos and videos in <dir> by their date and time into <dest>.
+
+Options:
+  --dry-run   log results without performing any actions (default: false)
+  -h, --help  display help for command
+```
+
+### live-photos
+
+```
+Usage: myexif live-photos [options] <dir>
+
+Find live photo-video pairs and organize them based on their EXIF tag values.
+
+Options:
+  --dry-run         log live photo-video pairs without performing any actions (default: false)
+  -d, --dest <dir>  the destination directory to move the files into
+  -h, --help        display help for command
 ```
 
 ### normalize
