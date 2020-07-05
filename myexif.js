@@ -46,10 +46,6 @@ program
 
     count = organize({ filenames, dryRun, dest })
     console.log(`${count} files updated.`)
-
-    // console.log('dir', dir)
-    // console.log('dest', dest)
-    // console.log('dryRun', dryRun)
   })
 
 program
