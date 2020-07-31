@@ -13,10 +13,10 @@
     "repl": "node --experimental-repl-await repl.js"
   },
   "dependencies": {
-    "commander": "^5.0.0",
+    "commander": "^6.0.0",
     "glob": "^7.1.6",
     "lodash": "^4.17.19",
-    "luxon": "^1.22.0"
+    "luxon": "^1.24.1"
   },
   "devDependencies": {
     "prettier": "2.0.4"
