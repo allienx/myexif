@@ -19,6 +19,6 @@
     "luxon": "^1.24.1"
   },
   "devDependencies": {
-    "prettier": "2.0.4"
+    "prettier": "^2.0.5"
   }
 }
