@@ -9,8 +9,9 @@
     "myexif": "myexif.js"
   },
   "scripts": {
-    "prettier": "prettier --write 'src/**/*.js'",
-    "repl": "node --experimental-repl-await repl.js"
+    "repl": "node --experimental-repl-await repl.js",
+    "format": "prettier --check .",
+    "format:fix": "prettier --write ."
   },
   "dependencies": {
     "commander": "^6.2.0",
@@ -19,6 +20,6 @@
     "luxon": "^1.25.0"
   },
   "devDependencies": {
-    "prettier": "^2.0.5"
+    "prettier": "2.2.0"
   }
 }
