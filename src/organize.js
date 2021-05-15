@@ -54,6 +54,9 @@ function getTag(ext) {
     case '.mov':
     case '.mp4':
       return 'QuickTime:CreationDate'
+
+    case '.gif':
+      return 'XMP:DateTimeOriginal'
   }
 }
 
