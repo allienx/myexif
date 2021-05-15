@@ -15,9 +15,9 @@
   },
   "dependencies": {
     "commander": "^6.2.0",
-    "glob": "^7.1.6",
-    "lodash": "^4.17.20",
-    "luxon": "^1.25.0"
+    "glob": "^7.1.7",
+    "lodash": "^4.17.21",
+    "luxon": "^1.27.0"
   },
   "devDependencies": {
     "prettier": "2.2.0"
