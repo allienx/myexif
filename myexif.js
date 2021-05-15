@@ -24,8 +24,8 @@ program
     'Organizes all photos and videos in <dir> by their date and time into <dest>.',
   )
   .option('--dry-run', 'log results without performing any actions', false)
-  .action((dir, dest, opts) => {
-    const { dryRun } = opts
+  .action((dir, dest, options) => {
+    const { dryRun } = options
 
     let filenames = glob.sync(path.join(dir, '*'))
 
@@ -62,8 +62,8 @@ program
     '-d, --dest <dir>',
     'the destination directory to move the files into',
   )
-  .action((dir, opts) => {
-    const { dryRun, dest } = opts
+  .action((dir, options) => {
+    const { dryRun, dest } = options
 
     const count = livePhotos({ dir, dryRun, dest })
 
@@ -76,8 +76,8 @@ program
     'Normalize filenames using lowercase and dashes. Uses consistent .jpg extension.',
   )
   .option('--dry-run', 'log new file names without performing actions', false)
-  .action((filenames, opts) => {
-    const { dryRun } = opts
+  .action((filenames, options) => {
+    const { dryRun } = options
 
     const count = normalize({ filenames, dryRun })
 
@@ -96,8 +96,8 @@ program
     '-d, --dest <dir>',
     'the destination directory to move the files into',
   )
-  .action((filenames, opts) => {
-    const { dryRun, dest } = opts
+  .action((filenames, options) => {
+    const { dryRun, dest } = options
 
     const count = organize({ filenames, dryRun, dest })
 
@@ -109,8 +109,8 @@ program
   .description('Set permissions (chmod) for the matching files.')
   .option('--dry-run', 'log new permissions without performing actions', false)
   .option('-m, --mode <mode>', 'new permissions as octal string', '644')
-  .action((filenames, opts) => {
-    const { dryRun, mode } = opts
+  .action((filenames, options) => {
+    const { dryRun, mode } = options
 
     const count = setPermissions({ filenames, dryRun, mode })
 
@@ -131,8 +131,8 @@ program
     '-t, --timezone <timezone>',
     'set the QuickTime:CreationDate EXIF tag relative to this timezone',
   )
-  .action((filenames, opts) => {
-    const { dryRun, timezone } = opts
+  .action((filenames, options) => {
+    const { dryRun, timezone } = options
 
     const count = setVideoDates({ filenames, dryRun, timezone })
 
@@ -163,8 +163,8 @@ program
     '-n, --new-timezone <timezone>',
     'set the EXIF tag value relative to this timezone',
   )
-  .action((filenames, opts) => {
-    const { dryRun, tag, srcTimezone, newTimezone } = opts
+  .action((filenames, options) => {
+    const { dryRun, tag, srcTimezone, newTimezone } = options
 
     const count = updateTimezone({
       filenames,

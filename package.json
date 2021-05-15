@@ -14,7 +14,7 @@
     "format:fix": "prettier --write ."
   },
   "dependencies": {
-    "commander": "6.2.0",
+    "commander": "7.2.0",
     "glob": "7.1.7",
     "lodash": "4.17.21",
     "luxon": "1.27.0"
