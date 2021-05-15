@@ -16,14 +16,10 @@ Requires
 
 - [nodejs v14+](https://nodejs.org/)
 - [exiftool](https://exiftool.org/)
-- [yarn](https://yarnpkg.com/) or [npm](https://www.npmjs.com/)
+- [yarn](https://yarnpkg.com/)
 
 ```sh
-yarn add global https://github.com/allienx/myexif#master
-
-# or
-
-npm install -g https://github.com/allienx/myexif#master
+yarn global add https://github.com/allienx/myexif#main
 ```
 
 ## Usage
