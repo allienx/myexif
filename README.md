@@ -14,7 +14,7 @@ Scripts to help organize photos and videos by their EXIF metadata.
 
 Requires
 
-- [nodejs v12+](https://nodejs.org/)
+- [nodejs v14+](https://nodejs.org/)
 - [exiftool](https://exiftool.org/)
 - [yarn](https://yarnpkg.com/) or [npm](https://www.npmjs.com/)
 
