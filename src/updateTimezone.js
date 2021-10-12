@@ -1,12 +1,8 @@
-const { execSync } = require('child_process')
+import { execSync } from 'child_process'
+import { DateTime } from 'luxon'
+import { getExifTagValue } from './util/exif.js'
 
-const { DateTime } = require('luxon')
-
-const { getExifTagValue } = require('./util/exif')
-
-module.exports = {
-  updateTimezone,
-}
+export { updateTimezone }
 
 function updateTimezone({ filenames, dryRun, tag, srcTimezone, newTimezone }) {
   const fmt = 'yyyy:MM:dd HH:mm:ss'

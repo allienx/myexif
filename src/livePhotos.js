@@ -1,12 +1,9 @@
-const { mkdirSync, renameSync } = require('fs')
-const path = require('path')
+import fs from 'fs'
+import path from 'path'
+import { getExifTags, parseExifDate } from './util/exif.js'
+import { getNewFilename, getNewSidecarFilename } from './util/filename.js'
 
-const { getExifTags, parseExifDate } = require('./util/exif')
-const { getNewFilename, getNewSidecarFilename } = require('./util/filename')
-
-module.exports = {
-  livePhotos,
-}
+export { livePhotos }
 
 function livePhotos({ dir, dryRun, dest }) {
   const photos = getLivePhotos(dir)
@@ -44,13 +41,13 @@ function livePhotos({ dir, dryRun, dest }) {
     }
 
     if (!dryRun) {
-      mkdirSync(newDir, { recursive: true })
+      fs.mkdirSync(newDir, { recursive: true })
 
-      renameSync(photoFilename, newPhotoFilename)
-      renameSync(videoFilename, newVideoFilename)
+      fs.renameSync(photoFilename, newPhotoFilename)
+      fs.renameSync(videoFilename, newVideoFilename)
 
       if (newSidecarFilename) {
-        renameSync(sidecarFilename, newSidecarFilename)
+        fs.renameSync(sidecarFilename, newSidecarFilename)
       }
     }
   })

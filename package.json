@@ -8,6 +8,7 @@
   "bin": {
     "myexif": "myexif.js"
   },
+  "type": "module",
   "scripts": {
     "repl": "node --experimental-repl-await repl.js",
     "format": "prettier --check .",

@@ -1,22 +1,21 @@
 #!/usr/bin/env node
 
-const path = require('path')
-
-const program = require('commander')
-const glob = require('glob')
-
-const packageJson = require('./package.json')
-const { livePhotos } = require('./src/livePhotos')
-const { normalize } = require('./src/normalize')
-const { organize } = require('./src/organize')
-const { setPermissions } = require('./src/setPermissions')
-const { setVideoDates } = require('./src/setVideoDates')
-const { updateTimezone } = require('./src/updateTimezone')
+import path from 'path'
+import program from 'commander'
+import glob from 'glob'
+import { livePhotos } from './src/livePhotos.js'
+import { normalize } from './src/normalize.js'
+import { organize } from './src/organize.js'
+import { setPermissions } from './src/setPermissions.js'
+import { setVideoDates } from './src/setVideoDates.js'
+import { updateTimezone } from './src/updateTimezone.js'
 
 program
-  .name(packageJson.name)
-  .version(packageJson.version)
-  .description(packageJson.description)
+  .name('myexif')
+  .version('0.0.6')
+  .description(
+    'Scripts to help organize photos and videos by their EXIF metadata.',
+  )
 
 program
   .command('run-all <dir> <dest>')

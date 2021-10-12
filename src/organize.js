@@ -1,13 +1,10 @@
-const { execSync } = require('child_process')
-const { mkdirSync, renameSync } = require('fs')
-const path = require('path')
+import { execSync } from 'child_process'
+import fs from 'fs'
+import path from 'path'
+import { getExifTagValue, parseExifDate } from './util/exif.js'
+import { getNewFilename, getNewSidecarFilename } from './util/filename.js'
 
-const { getExifTagValue, parseExifDate } = require('./util/exif')
-const { getNewFilename, getNewSidecarFilename } = require('./util/filename')
-
-module.exports = {
-  organize,
-}
+export { organize }
 
 function organize({ filenames, dryRun, dest }) {
   filenames.forEach((filename) => {
@@ -95,12 +92,12 @@ function moveFile({ filename, date, dryRun, dest }) {
   }
 
   if (!dryRun) {
-    mkdirSync(newDir, { recursive: true })
+    fs.mkdirSync(newDir, { recursive: true })
 
-    renameSync(filename, newFilename)
+    fs.renameSync(filename, newFilename)
 
     if (newSidecarFilename) {
-      renameSync(sidecarFilename, newSidecarFilename)
+      fs.renameSync(sidecarFilename, newSidecarFilename)
     }
   }
 }

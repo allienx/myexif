@@ -1,13 +1,10 @@
-const { accessSync, constants, statSync } = require('fs')
+import fs from 'fs'
 
-module.exports = {
-  exists,
-  isFile,
-}
+export { exists, isFile }
 
 function exists(filename) {
   try {
-    accessSync(filename, constants.F_OK)
+    fs.accessSync(filename, fs.constants.F_OK)
 
     return true
   } catch {
@@ -16,7 +13,7 @@ function exists(filename) {
 }
 
 function isFile(filename) {
-  const stats = statSync(filename)
+  const stats = fs.statSync(filename)
 
   return stats.isFile()
 }

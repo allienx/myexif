@@ -1,12 +1,7 @@
-const { execSync } = require('child_process')
+import { execSync } from 'child_process'
+import { DateTime } from 'luxon'
 
-const { DateTime } = require('luxon')
-
-module.exports = {
-  getExifTagValue,
-  getExifTags,
-  parseExifDate,
-}
+export { getExifTagValue, getExifTags, parseExifDate }
 
 function getExifTagValue(filename, tag) {
   const commandArgs = ['exiftool', '-T', `-${tag}`, `"${filename}"`]

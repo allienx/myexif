@@ -1,12 +1,8 @@
-const { execSync } = require('child_process')
+import { execSync } from 'child_process'
+import { DateTime } from 'luxon'
+import { getExifTagValue } from './util/exif.js'
 
-const { DateTime } = require('luxon')
-
-const { getExifTagValue } = require('./util/exif')
-
-module.exports = {
-  setVideoDates,
-}
+export { setVideoDates }
 
 function setVideoDates({ filenames, dryRun, timezone }) {
   filenames.forEach((filename) => {

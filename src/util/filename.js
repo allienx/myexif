@@ -1,13 +1,8 @@
-const path = require('path')
+import path from 'path'
+import { DateTime } from 'luxon'
+import { exists } from './path.js'
 
-const { DateTime } = require('luxon')
-
-const { exists } = require('./path')
-
-module.exports = {
-  getNewFilename,
-  getNewSidecarFilename,
-}
+export { getNewFilename, getNewSidecarFilename }
 
 function getNewFilename({ filename, date, dest }) {
   const newDir = getDirectory({ dest, date })

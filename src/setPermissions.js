@@ -1,10 +1,7 @@
-const { chmodSync } = require('fs')
+import fs from 'fs'
+import { isFile } from './util/path.js'
 
-const { isFile } = require('./util/path')
-
-module.exports = {
-  setPermissions,
-}
+export { setPermissions }
 
 function setPermissions({ filenames, dryRun, mode }) {
   filenames.forEach((filename) => {
@@ -15,7 +12,7 @@ function setPermissions({ filenames, dryRun, mode }) {
     console.log(`chmod ${mode} ${filename}`)
 
     if (!dryRun) {
-      chmodSync(filename, mode)
+      fs.chmodSync(filename, mode)
     }
   })
 

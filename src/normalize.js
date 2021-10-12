@@ -1,15 +1,11 @@
-const { renameSync } = require('fs')
-const path = require('path')
+import fs from 'fs'
+import path from 'path'
+import flowFp from 'lodash/fp/flow.js'
+import kebabCaseFp from 'lodash/fp/kebabCase.js'
+import toLowerFp from 'lodash/fp/toLower.js'
+import { isFile } from './util/path.js'
 
-const flow = require('lodash/fp/flow')
-const kebabCase = require('lodash/fp/kebabCase')
-const toLower = require('lodash/fp/toLower')
-
-const { isFile } = require('./util/path')
-
-module.exports = {
-  normalize,
-}
+export { normalize }
 
 function normalize({ filenames, dryRun }) {
   filenames = Array.isArray(filenames) ? filenames : [filenames]
@@ -28,7 +24,7 @@ function normalize({ filenames, dryRun }) {
     console.log(`${filename} -> ${newFilename}`)
 
     if (!dryRun) {
-      renameSync(filename, newFilename)
+      fs.renameSync(filename, newFilename)
     }
   })
 
@@ -36,21 +32,21 @@ function normalize({ filenames, dryRun }) {
 }
 
 function transformName(name) {
-  const transform = flow(toLower, kebabCase)
+  const transform = flowFp(toLowerFp, kebabCaseFp)
 
   return transform(name)
 }
 
 function transformExtention(ext) {
-  const transform = flow(toLower, jpg)
+  const transform = flowFp(toLowerFp, toJpg)
 
   return transform(ext)
 }
 
-function jpg(ext) {
-  const JPG_EXT = ['.jpg', '.jpeg']
+function toJpg(ext) {
+  const jpgExtensions = ['.jpg', '.jpeg']
 
-  if (JPG_EXT.includes(ext)) {
+  if (jpgExtensions.includes(ext)) {
     return '.jpg'
   }
 
