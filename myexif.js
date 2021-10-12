@@ -3,9 +3,9 @@
 import path from 'path'
 import program from 'commander'
 import glob from 'glob'
-import { livePhotos } from './src/livePhotos.js'
+import { moveFiles } from './src/moveFiles.js'
+import { moveLivePhotos } from './src/moveLivePhotos.js'
 import { normalize } from './src/normalize.js'
-import { organize } from './src/organize.js'
 import { setPermissions } from './src/setPermissions.js'
 import { setVideoDates } from './src/setVideoDates.js'
 import { updateTimezone } from './src/updateTimezone.js'
@@ -37,13 +37,13 @@ program
     count = setPermissions({ filenames, dryRun, mode: '644' })
     console.log(`${count} files updated.\n`)
 
-    count = livePhotos({ dir, dryRun, dest })
+    count = moveLivePhotos({ dir, dryRun, dest })
     console.log(`${count} live photos updated.\n`)
 
     // Re-glob to pick up changes made by livePhotos.
     filenames = glob.sync(path.join(dir, '*'))
 
-    count = organize({ filenames, dryRun, dest })
+    count = moveFiles({ filenames, dryRun, dest })
     console.log(`${count} files updated.`)
   })
 
@@ -64,7 +64,7 @@ program
   .action((dir, options) => {
     const { dryRun, dest } = options
 
-    const count = livePhotos({ dir, dryRun, dest })
+    const count = moveLivePhotos({ dir, dryRun, dest })
 
     console.log(`\n${count} live photos updated.`)
   })
@@ -84,8 +84,10 @@ program
   })
 
 program
-  .command('organize <filenames...>')
-  .description('Organize filenames based on their EXIF tag values.')
+  .command('move <filenames...>')
+  .description(
+    'Organizes all photo and video files based on their EXIF tag values.',
+  )
   .option(
     '--dry-run',
     'log exiftool commands without performing any actions',
@@ -98,7 +100,7 @@ program
   .action((filenames, options) => {
     const { dryRun, dest } = options
 
-    const count = organize({ filenames, dryRun, dest })
+    const count = moveFiles({ dryRun, filenames, dest })
 
     console.log(`\n${count} files updated.`)
   })

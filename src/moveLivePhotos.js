@@ -1,11 +1,12 @@
 import fs from 'fs'
 import path from 'path'
 import { getExifTags, parseExifDate } from './util/exif.js'
-import { getNewFilename, getNewSidecarFilename } from './util/filename.js'
+import getNewFilename from './util/getNewFilename.js'
+import getNewSidecarFilename from './util/getNewSidecarFilename.js'
 
-export { livePhotos }
+export { moveLivePhotos }
 
-function livePhotos({ dir, dryRun, dest }) {
+function moveLivePhotos({ dir, dryRun, dest }) {
   const photos = getLivePhotos(dir)
 
   photos.forEach((livePhoto) => {

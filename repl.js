@@ -5,14 +5,15 @@ const repl = require('repl')
 const lodash = require('lodash')
 const { DateTime } = require('luxon')
 
-const { livePhotos } = require('./src/livePhotos')
+const { moveFiles } = require('./src/moveFiles')
+const { moveLivePhotos } = require('./src/moveLivePhotos')
 const { normalize } = require('./src/normalize')
-const { organize } = require('./src/organize')
 const { setPermissions } = require('./src/setPermissions')
 const { setVideoDates } = require('./src/setVideoDates')
 const { updateTimezone } = require('./src/updateTimezone')
 const exifUtils = require('./src/util/exif')
-const filenameUtils = require('./src/util/filename')
+import getNewFilename from './src/util/getNewFilename.js'
+import getNewSidecarFilename from './src/util/getNewSidecarFilename.js'
 const pathUtils = require('./src/util/path')
 
 console.log(new Date().toString())
@@ -39,9 +40,9 @@ Object.defineProperty(r.context, 'actions', {
   configurable: false,
   enumerable: true,
   value: {
-    livePhotos,
+    livePhotos: moveLivePhotos,
     normalize,
-    organize,
+    organize: moveFiles,
     setPermissions,
     setVideoDates,
     updateTimezone,
@@ -53,7 +54,8 @@ Object.defineProperty(r.context, 'utils', {
   enumerable: true,
   value: {
     exif: exifUtils,
-    filename: filenameUtils,
+    getNewFilename,
+    getNewSidecarFilename,
     path: pathUtils,
   },
 })

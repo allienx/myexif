@@ -2,15 +2,16 @@ import { execSync } from 'child_process'
 import fs from 'fs'
 import path from 'path'
 import { getExifTagValue, parseExifDate } from './util/exif.js'
-import { getNewFilename, getNewSidecarFilename } from './util/filename.js'
+import getNewFilename from './util/getNewFilename.js'
+import getNewSidecarFilename from './util/getNewSidecarFilename.js'
 
-export { organize }
+export { moveFiles }
 
-function organize({ filenames, dryRun, dest }) {
+function moveFiles({ dryRun, filenames, dest }) {
   filenames.forEach((filename) => {
     const { ext } = path.parse(filename)
 
-    // Skip sidecar files because they're moved with their main file.
+    // Skip sidecar files because they'll be moved with their main file.
     if (['.aae'].includes(ext)) {
       return
     }
@@ -33,31 +34,14 @@ function organize({ filenames, dryRun, dest }) {
     }
 
     const date = parseExifDate(dateStr)
+
     moveFile({ filename, date, dryRun, dest })
   })
 
   return filenames.length
 }
 
-function getTag(ext) {
-  switch (ext) {
-    case '.jpg':
-    case '.heic':
-      return 'EXIF:DateTimeOriginal'
-
-    case '.png':
-      return 'XMP:DateCreated'
-
-    case '.mov':
-    case '.mp4':
-      return 'QuickTime:CreationDate'
-
-    case '.gif':
-      return 'XMP:DateTimeOriginal'
-  }
-}
-
-function setAllDates({ filename, dryRun, tag }) {
+function setAllDates({ dryRun, filename, tag }) {
   const commandArgs = [
     'exiftool',
     '-preserve',
@@ -74,7 +58,7 @@ function setAllDates({ filename, dryRun, tag }) {
   }
 }
 
-function moveFile({ filename, date, dryRun, dest }) {
+function moveFile({ dryRun, filename, date, dest }) {
   const { dir: newDir, filename: newFilename } = getNewFilename({
     filename,
     date,
@@ -94,10 +78,28 @@ function moveFile({ filename, date, dryRun, dest }) {
   if (!dryRun) {
     fs.mkdirSync(newDir, { recursive: true })
 
-    fs.renameSync(filename, newFilename)
+    fs.copyFileSync(filename, newFilename)
 
     if (newSidecarFilename) {
-      fs.renameSync(sidecarFilename, newSidecarFilename)
+      fs.copyFileSync(sidecarFilename, newSidecarFilename)
     }
+  }
+}
+
+function getTag(ext) {
+  switch (ext.toLowerCase()) {
+    case '.jpg':
+    case '.heic':
+      return 'EXIF:DateTimeOriginal'
+
+    case '.png':
+      return 'XMP:DateCreated'
+
+    case '.mov':
+    case '.mp4':
+      return 'QuickTime:CreationDate'
+
+    case '.gif':
+      return 'XMP:DateTimeOriginal'
   }
 }
