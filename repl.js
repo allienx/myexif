@@ -7,7 +7,6 @@ const { DateTime } = require('luxon')
 
 const { moveFiles } = require('./src/moveFiles')
 const { moveLivePhotos } = require('./src/moveLivePhotos')
-const { normalize } = require('./src/normalize')
 const { setPermissions } = require('./src/setPermissions')
 const { setVideoDates } = require('./src/setVideoDates')
 const { updateTimezone } = require('./src/updateTimezone')

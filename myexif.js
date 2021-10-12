@@ -1,11 +1,8 @@
 #!/usr/bin/env node
 
-import path from 'path'
 import program from 'commander'
-import glob from 'glob'
 import { moveFiles } from './src/moveFiles.js'
 import { moveLivePhotos } from './src/moveLivePhotos.js'
-import { normalize } from './src/normalize.js'
 import { setPermissions } from './src/setPermissions.js'
 import { setVideoDates } from './src/setVideoDates.js'
 import { updateTimezone } from './src/updateTimezone.js'
@@ -16,72 +13,6 @@ program
   .description(
     'Scripts to help organize photos and videos by their EXIF metadata.',
   )
-
-program
-  .command('run-all <dir> <dest>')
-  .description(
-    'Organizes all photos and videos in <dir> by their date and time into <dest>.',
-  )
-  .option('--dry-run', 'log results without performing any actions', false)
-  .action((dir, dest, options) => {
-    const { dryRun } = options
-
-    let filenames = glob.sync(path.join(dir, '*'))
-
-    let count = normalize({ filenames, dryRun })
-    console.log(`${count} files updated.\n`)
-
-    // Re-glob to get normalized filenames.
-    filenames = glob.sync(path.join(dir, '*'))
-
-    count = setPermissions({ filenames, dryRun, mode: '644' })
-    console.log(`${count} files updated.\n`)
-
-    count = moveLivePhotos({ dir, dryRun, dest })
-    console.log(`${count} live photos updated.\n`)
-
-    // Re-glob to pick up changes made by livePhotos.
-    filenames = glob.sync(path.join(dir, '*'))
-
-    count = moveFiles({ filenames, dryRun, dest })
-    console.log(`${count} files updated.`)
-  })
-
-program
-  .command('live-photos <dir>')
-  .description(
-    'Find live photo-video pairs and organize them based on their EXIF tag values.',
-  )
-  .option(
-    '--dry-run',
-    'log live photo-video pairs without performing any actions',
-    false,
-  )
-  .requiredOption(
-    '-d, --dest <dir>',
-    'the destination directory to move the files into',
-  )
-  .action((dir, options) => {
-    const { dryRun, dest } = options
-
-    const count = moveLivePhotos({ dir, dryRun, dest })
-
-    console.log(`\n${count} live photos updated.`)
-  })
-
-program
-  .command('normalize <filenames...>')
-  .description(
-    'Normalize filenames using lowercase and dashes. Uses consistent .jpg extension.',
-  )
-  .option('--dry-run', 'log new file names without performing actions', false)
-  .action((filenames, options) => {
-    const { dryRun } = options
-
-    const count = normalize({ filenames, dryRun })
-
-    console.log(`\n${count} files updated.`)
-  })
 
 program
   .command('move <filenames...>')
@@ -103,6 +34,28 @@ program
     const count = moveFiles({ dryRun, filenames, dest })
 
     console.log(`\n${count} files updated.`)
+  })
+
+program
+  .command('move-live-photos <dir>')
+  .description(
+    'Finds live photo-video pairs and organizes them based on their EXIF tag values.',
+  )
+  .option(
+    '--dry-run',
+    'log live photo-video pairs without performing any actions',
+    false,
+  )
+  .requiredOption(
+    '-d, --dest <dir>',
+    'the destination directory to move the files into',
+  )
+  .action((dir, options) => {
+    const { dryRun, dest } = options
+
+    const count = moveLivePhotos({ dryRun, dir, dest })
+
+    console.log(`\n${count} live photos updated.`)
   })
 
 program

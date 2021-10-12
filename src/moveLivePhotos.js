@@ -6,77 +6,86 @@ import getNewSidecarFilename from './util/getNewSidecarFilename.js'
 
 export { moveLivePhotos }
 
-function moveLivePhotos({ dir, dryRun, dest }) {
+function moveLivePhotos({ dryRun, dir, dest }) {
+  let count = 0
   const photos = getLivePhotos(dir)
 
-  photos.forEach((livePhoto) => {
-    if (!livePhoto.isComplete) {
-      return
-    }
-
-    const { dateTimeOriginal, photoFilename, videoFilename } = livePhoto
-    const date = parseExifDate(dateTimeOriginal)
-
-    const { dir: newDir, filename: newPhotoFilename } = getNewFilename({
-      filename: photoFilename,
-      date,
-      dest,
+  photos
+    .filter((livePhoto) => {
+      return livePhoto.isComplete
     })
+    .forEach((livePhoto) => {
+      count += 1
 
-    const { filename: newVideoFilename } = getNewFilename({
-      filename: videoFilename,
-      date,
-      dest,
-    })
+      const { dateTimeOriginal, photoFilename, videoFilename } = livePhoto
+      const date = parseExifDate(dateTimeOriginal)
 
-    const { sidecarFilename, newSidecarFilename } = getNewSidecarFilename({
-      filename: photoFilename,
-      newFilename: newPhotoFilename,
-    })
+      const { dir: newDir, filename: newPhotoFilename } = getNewFilename({
+        filename: photoFilename,
+        date,
+        dest,
+      })
 
-    console.log(`${photoFilename} -> ${newPhotoFilename}`)
-    console.log(`${videoFilename} -> ${newVideoFilename}`)
+      const { filename: newVideoFilename } = getNewFilename({
+        filename: videoFilename,
+        date,
+        dest,
+      })
 
-    if (newSidecarFilename) {
-      console.log(`${sidecarFilename} -> ${newSidecarFilename}`)
-    }
+      const { sidecarFilename, newSidecarFilename } = getNewSidecarFilename({
+        filename: photoFilename,
+        newFilename: newPhotoFilename,
+      })
 
-    if (!dryRun) {
-      fs.mkdirSync(newDir, { recursive: true })
-
-      fs.renameSync(photoFilename, newPhotoFilename)
-      fs.renameSync(videoFilename, newVideoFilename)
+      console.log(`${photoFilename} -> ${newPhotoFilename}`)
+      console.log(`${videoFilename} -> ${newVideoFilename}`)
 
       if (newSidecarFilename) {
-        fs.renameSync(sidecarFilename, newSidecarFilename)
+        console.log(`${sidecarFilename} -> ${newSidecarFilename}`)
       }
-    }
-  })
 
-  return photos.length
+      if (!dryRun) {
+        fs.mkdirSync(newDir, { recursive: true })
+
+        fs.renameSync(photoFilename, newPhotoFilename)
+        fs.renameSync(videoFilename, newVideoFilename)
+
+        if (newSidecarFilename) {
+          fs.renameSync(sidecarFilename, newSidecarFilename)
+        }
+      }
+    })
+
+  return count
 }
 
 function getLivePhotos(dir) {
   const exifTags = getExifTags({
     filenames: [`"${dir}"`],
-    tags: ['DateTimeOriginal', 'ContentIdentifier'],
+    tags: [
+      'EXIF:DateTimeOriginal',
+      'MakerNotes:MediaGroupUUID',
+      'QuickTime:ContentIdentifier',
+    ],
   })
 
   const livePhotos = {}
 
   exifTags.forEach((exifTag) => {
-    const { SourceFile, DateTimeOriginal, ContentIdentifier } = exifTag
+    const { SourceFile, DateTimeOriginal, MediaGroupUUID, ContentIdentifier } =
+      exifTag
+    const uuid = MediaGroupUUID || ContentIdentifier
 
-    if (!ContentIdentifier) {
+    if (!uuid) {
       return
     }
 
     const { ext } = path.parse(SourceFile)
-    let livePhoto = livePhotos[ContentIdentifier]
+    let livePhoto = livePhotos[uuid]
 
     if (!livePhoto) {
-      livePhoto = { contentIdentifier: ContentIdentifier }
-      livePhotos[ContentIdentifier] = livePhoto
+      livePhoto = { contentIdentifier: uuid }
+      livePhotos[uuid] = livePhoto
     }
 
     if (ext.toLowerCase() === '.mov') {
