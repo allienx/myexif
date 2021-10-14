@@ -1,39 +1,44 @@
 import { execSync } from 'child_process'
 import fs from 'fs'
+import groupBy from 'lodash/groupBy.js'
 import path from 'path'
-import { getExifTagValue, parseExifDate } from './util/exif.js'
+import { getExifTags, parseExifDate } from './util/exif.js'
 import getNewFilename from './util/getNewFilename.js'
 import getNewSidecarFilename from './util/getNewSidecarFilename.js'
 
+const NO_TAG = 'no_tag'
+
 export default function copyFiles({ dryRun, filenames, dest }) {
-  filenames.forEach((filename) => {
+  const filesGroupedByTag = groupBy(filenames, (filename) => {
     const { ext } = path.parse(filename)
 
-    // Skip sidecar files because they'll be moved with their main file.
-    if (['.aae'].includes(ext)) {
+    return getTag(ext)
+  })
+
+  Object.entries(filesGroupedByTag).forEach(([exifTag, files]) => {
+    if (exifTag === NO_TAG) {
       return
     }
 
-    const tag = getTag(ext)
+    getExifTags({ filenames: files, tags: [exifTag] }).forEach((obj) => {
+      const [, tag] = exifTag.split(':')
+      const dateStr = obj[tag]
 
-    if (!tag) {
-      console.log(`Unsupported file type: ${filename}`)
-      return
-    }
+      if (!dateStr) {
+        return
+      }
 
-    const dateStr = getExifTagValue(filename, tag)
+      const filename = obj['SourceFile']
+      const { ext } = path.parse(filename)
 
-    if (dateStr === '-') {
-      return
-    }
+      if (ext === '.png') {
+        setAllDates({ filename, dryRun, tag })
+      }
 
-    if (ext === '.png') {
-      setAllDates({ filename, dryRun, tag })
-    }
+      const date = parseExifDate(dateStr)
 
-    const date = parseExifDate(dateStr)
-
-    copyFile({ filename, date, dryRun, dest })
+      copyFile({ filename, date, dryRun, dest })
+    })
   })
 
   return filenames.length
@@ -87,6 +92,7 @@ function copyFile({ dryRun, filename, date, dest }) {
 function getTag(ext) {
   switch (ext.toLowerCase()) {
     case '.jpg':
+    case '.jpeg':
     case '.heic':
       return 'EXIF:DateTimeOriginal'
 
@@ -99,5 +105,8 @@ function getTag(ext) {
 
     case '.gif':
       return 'XMP:DateTimeOriginal'
+
+    default:
+      return NO_TAG
   }
 }

@@ -14,8 +14,8 @@ function getExifTags({ filenames, tags }) {
   const commandArgs = [
     'exiftool',
     '-json',
-    tags.map((tag) => `-${tag}`).join(' '),
-    filenames.join(' '),
+    tags.map((t) => `-${t}`).join(' '),
+    filenames.map((fn) => `"${fn}"`).join(' '),
   ]
   const command = commandArgs.join(' ')
   const stdout = _exiftool(command)
