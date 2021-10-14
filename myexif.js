@@ -2,7 +2,7 @@
 
 import program from 'commander'
 import copyFiles from './src/copyFiles.js'
-import { moveLivePhotos } from './src/moveLivePhotos.js'
+import copyLivePhotos from './src/copyLivePhotos.js'
 import { setPermissions } from './src/setPermissions.js'
 import { setVideoDates } from './src/setVideoDates.js'
 import { updateTimezone } from './src/updateTimezone.js'
@@ -18,7 +18,7 @@ program
 program
   .command('copy <paths...>')
   .description(
-    'copies all photo and video files and organizes them based on their EXIF tag values.',
+    'Copies all photo and video files and organizes them based on their EXIF tag values.',
   )
   .option(
     '--dry-run',
@@ -40,7 +40,7 @@ program
   })
 
 program
-  .command('move-live-photos <dir>')
+  .command('copy-live-photos <dir>')
   .description(
     'Finds live photo-video pairs and organizes them based on their EXIF tag values.',
   )
@@ -56,7 +56,7 @@ program
   .action((dir, options) => {
     const { dryRun, dest } = options
 
-    const count = moveLivePhotos({ dryRun, dir, dest })
+    const count = copyLivePhotos({ dryRun, dir, dest })
 
     console.log(`\n${count} live photos updated.`)
   })

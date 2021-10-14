@@ -4,9 +4,7 @@ import { getExifTags, parseExifDate } from './util/exif.js'
 import getNewFilename from './util/getNewFilename.js'
 import getNewSidecarFilename from './util/getNewSidecarFilename.js'
 
-export { moveLivePhotos }
-
-function moveLivePhotos({ dryRun, dir, dest }) {
+export default function copyLivePhotos({ dryRun, dir, dest }) {
   let count = 0
   const photos = getLivePhotos(dir)
 
@@ -47,11 +45,11 @@ function moveLivePhotos({ dryRun, dir, dest }) {
       if (!dryRun) {
         fs.mkdirSync(newDir, { recursive: true })
 
-        fs.renameSync(photoFilename, newPhotoFilename)
-        fs.renameSync(videoFilename, newVideoFilename)
+        fs.copyFileSync(photoFilename, newPhotoFilename)
+        fs.copyFileSync(videoFilename, newVideoFilename)
 
         if (newSidecarFilename) {
-          fs.renameSync(sidecarFilename, newSidecarFilename)
+          fs.copyFileSync(sidecarFilename, newSidecarFilename)
         }
       }
     })
