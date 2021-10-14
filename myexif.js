@@ -1,11 +1,12 @@
 #!/usr/bin/env node
 
 import program from 'commander'
-import { moveFiles } from './src/moveFiles.js'
+import copyFiles from './src/copyFiles.js'
 import { moveLivePhotos } from './src/moveLivePhotos.js'
 import { setPermissions } from './src/setPermissions.js'
 import { setVideoDates } from './src/setVideoDates.js'
 import { updateTimezone } from './src/updateTimezone.js'
+import getAllFiles from './src/util/getAllFiles.js'
 
 program
   .name('myexif')
@@ -15,9 +16,9 @@ program
   )
 
 program
-  .command('move <filenames...>')
+  .command('copy <paths...>')
   .description(
-    'Organizes all photo and video files based on their EXIF tag values.',
+    'copies all photo and video files and organizes them based on their EXIF tag values.',
   )
   .option(
     '--dry-run',
@@ -28,10 +29,12 @@ program
     '-d, --dest <dir>',
     'the destination directory to move the files into',
   )
-  .action((filenames, options) => {
+  .action((filePaths, options) => {
     const { dryRun, dest } = options
 
-    const count = moveFiles({ dryRun, filenames, dest })
+    const filenames = getAllFiles(filePaths)
+
+    const count = copyFiles({ dryRun, filenames, dest })
 
     console.log(`\n${count} files updated.`)
   })

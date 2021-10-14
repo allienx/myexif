@@ -1,6 +1,6 @@
 import fs from 'fs'
 
-export { exists, isFile }
+export { exists, isDirectory, isFile }
 
 function exists(filename) {
   try {
@@ -12,8 +12,14 @@ function exists(filename) {
   }
 }
 
-function isFile(filename) {
-  const stats = fs.statSync(filename)
+function isDirectory(filePath) {
+  const stats = fs.statSync(filePath)
+
+  return stats.isDirectory()
+}
+
+function isFile(filePath) {
+  const stats = fs.statSync(filePath)
 
   return stats.isFile()
 }

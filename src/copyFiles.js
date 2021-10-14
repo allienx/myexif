@@ -5,9 +5,7 @@ import { getExifTagValue, parseExifDate } from './util/exif.js'
 import getNewFilename from './util/getNewFilename.js'
 import getNewSidecarFilename from './util/getNewSidecarFilename.js'
 
-export { moveFiles }
-
-function moveFiles({ dryRun, filenames, dest }) {
+export default function copyFiles({ dryRun, filenames, dest }) {
   filenames.forEach((filename) => {
     const { ext } = path.parse(filename)
 
@@ -35,7 +33,7 @@ function moveFiles({ dryRun, filenames, dest }) {
 
     const date = parseExifDate(dateStr)
 
-    moveFile({ filename, date, dryRun, dest })
+    copyFile({ filename, date, dryRun, dest })
   })
 
   return filenames.length
@@ -58,7 +56,7 @@ function setAllDates({ dryRun, filename, tag }) {
   }
 }
 
-function moveFile({ dryRun, filename, date, dest }) {
+function copyFile({ dryRun, filename, date, dest }) {
   const { dir: newDir, filename: newFilename } = getNewFilename({
     filename,
     date,

@@ -5,7 +5,7 @@ const repl = require('repl')
 const lodash = require('lodash')
 const { DateTime } = require('luxon')
 
-const { moveFiles } = require('./src/moveFiles')
+const { copyFiles } = require('./src/moveFiles')
 const { moveLivePhotos } = require('./src/moveLivePhotos')
 const { setPermissions } = require('./src/setPermissions')
 const { setVideoDates } = require('./src/setVideoDates')
@@ -41,7 +41,7 @@ Object.defineProperty(r.context, 'actions', {
   value: {
     livePhotos: moveLivePhotos,
     normalize,
-    organize: moveFiles,
+    organize: copyFiles,
     setPermissions,
     setVideoDates,
     updateTimezone,
