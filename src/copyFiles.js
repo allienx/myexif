@@ -21,18 +21,17 @@ export default function copyFiles({ dryRun, filenames, dest }) {
     }
 
     getExifTags({ filenames: files, tags: [exifTag] }).forEach((obj) => {
-      const [, tag] = exifTag.split(':')
+      const tag = exifTag.split(':')[1]
       const dateStr = obj[tag]
+      const filename = obj['SourceFile']
+      const { ext } = path.parse(filename)
 
       if (!dateStr) {
         return
       }
 
-      const filename = obj['SourceFile']
-      const { ext } = path.parse(filename)
-
       if (ext === '.png') {
-        setAllDates({ filename, dryRun, tag })
+        setAllDates({ dryRun, filename, tag })
       }
 
       const date = parseExifDate(dateStr)

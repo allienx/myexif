@@ -2,9 +2,7 @@ import { execSync } from 'child_process'
 import { DateTime } from 'luxon'
 import { getExifTagValue } from './util/exif.js'
 
-export { setVideoDates }
-
-function setVideoDates({ filenames, dryRun, timezone }) {
+export default function setVideoDates({ filenames, dryRun, timezone }) {
   filenames.forEach((filename) => {
     const value = getExifTagValue(filename, 'QuickTime:CreateDate')
 

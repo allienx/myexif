@@ -7,8 +7,8 @@ const { DateTime } = require('luxon')
 
 const copyFiles = require('./src/copyFiles')
 const copyLivePhotos = require('./src/copyLivePhotos')
-const { setVideoDates } = require('./src/setVideoDates')
-const { updateTimezone } = require('./src/updateTimezone')
+const setVideoDates = require('./src/setVideoDates')
+const updateTimezone = require('./src/updateTimezone')
 const exifUtils = require('./src/util/exif')
 import getNewFilename from './src/util/getNewFilename.js'
 import getNewSidecarFilename from './src/util/getNewSidecarFilename.js'

@@ -3,8 +3,8 @@
 import program from 'commander'
 import copyFiles from './src/copyFiles.js'
 import copyLivePhotos from './src/copyLivePhotos.js'
-import { setVideoDates } from './src/setVideoDates.js'
-import { updateTimezone } from './src/updateTimezone.js'
+import setVideoDates from './src/setVideoDates.js'
+import updateTimezone from './src/updateTimezone.js'
 import getAllFiles from './src/util/getAllFiles.js'
 
 program

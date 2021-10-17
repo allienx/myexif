@@ -2,9 +2,13 @@ import { execSync } from 'child_process'
 import { DateTime } from 'luxon'
 import { getExifTagValue } from './util/exif.js'
 
-export { updateTimezone }
-
-function updateTimezone({ filenames, dryRun, tag, srcTimezone, newTimezone }) {
+export default function updateTimezone({
+  filenames,
+  dryRun,
+  tag,
+  srcTimezone,
+  newTimezone,
+}) {
   const fmt = 'yyyy:MM:dd HH:mm:ss'
 
   filenames.forEach((filename) => {
