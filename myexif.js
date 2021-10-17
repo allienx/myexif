@@ -3,7 +3,6 @@
 import program from 'commander'
 import copyFiles from './src/copyFiles.js'
 import copyLivePhotos from './src/copyLivePhotos.js'
-import { setPermissions } from './src/setPermissions.js'
 import { setVideoDates } from './src/setVideoDates.js'
 import { updateTimezone } from './src/updateTimezone.js'
 import getAllFiles from './src/util/getAllFiles.js'
@@ -59,19 +58,6 @@ program
     const count = copyLivePhotos({ dryRun, dir, dest })
 
     console.log(`\n${count} live photos updated.`)
-  })
-
-program
-  .command('set-permissions <filenames...>')
-  .description('Set permissions (chmod) for the matching files.')
-  .option('--dry-run', 'log new permissions without performing actions', false)
-  .option('-m, --mode <mode>', 'new permissions as octal string', '644')
-  .action((filenames, options) => {
-    const { dryRun, mode } = options
-
-    const count = setPermissions({ filenames, dryRun, mode })
-
-    console.log(`\n${count} files updated.`)
   })
 
 program

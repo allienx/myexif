@@ -7,7 +7,6 @@ const { DateTime } = require('luxon')
 
 const copyFiles = require('./src/copyFiles')
 const copyLivePhotos = require('./src/copyLivePhotos')
-const { setPermissions } = require('./src/setPermissions')
 const { setVideoDates } = require('./src/setVideoDates')
 const { updateTimezone } = require('./src/updateTimezone')
 const exifUtils = require('./src/util/exif')
@@ -41,7 +40,6 @@ Object.defineProperty(r.context, 'actions', {
   value: {
     copyFiles,
     copyLivePhotos,
-    setPermissions,
     setVideoDates,
     updateTimezone,
   },
