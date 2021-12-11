@@ -1,6 +1,7 @@
 import glob from 'glob'
 import path from 'path'
-import { isDirectory, isFile } from './path.js'
+import isDirectory from './isDirectory.js'
+import isFile from './isFile.js'
 
 export default function getAllFiles(filePaths) {
   const filenames = []

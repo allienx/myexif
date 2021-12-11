@@ -15,9 +15,12 @@ import getExifTags from './src/exif/getExifTags.js'
 import getExifTagValue from './src/exif/getExifTagValue.js'
 import parseExifDateString from './src/exif/parseExifDateString.js'
 
+import getAllFiles from './src/util/getAllFiles.js'
 import getNewFilename from './src/util/getNewFilename.js'
 import getNewSidecarFilename from './src/util/getNewSidecarFilename.js'
-const pathUtils = require('./src/util/path')
+import isDirectory from './src/util/isDirectory.js'
+import isFile from './src/util/isFile.js'
+import isValidPath from './src/util/isValidPath.js'
 
 console.log(new Date().toString())
 console.log(`\n=== Custom REPL initialized ===\n`)
@@ -65,8 +68,11 @@ Object.defineProperty(r.context, 'utils', {
   configurable: false,
   enumerable: true,
   value: {
+    getAllFiles,
     getNewFilename,
     getNewSidecarFilename,
-    path: pathUtils,
+    isDirectory,
+    isFile,
+    isValidPath,
   },
 })

@@ -1,11 +1,11 @@
 import path from 'path'
-import { exists } from './path.js'
+import isValidPath from './isValidPath'
 
 export default function getNewSidecarFilename({ filename, newFilename }) {
   const { dir, name } = path.parse(filename)
   const sidecarFilename = path.join(dir, `${name}.aae`)
 
-  if (!exists(sidecarFilename)) {
+  if (!isValidPath(sidecarFilename)) {
     return {}
   }
 
