@@ -1,6 +1,7 @@
 import fs from 'fs'
 import path from 'path'
-import { getExifTags, parseExifDate } from './util/exif.js'
+import getExifTags from './exif/getExifTags.js'
+import parseExifDateString from './exif/parseExifDateString.js'
 import getNewFilename from './util/getNewFilename.js'
 import getNewSidecarFilename from './util/getNewSidecarFilename.js'
 
@@ -16,7 +17,7 @@ export default function copyLivePhotos({ dryRun, dir, dest }) {
       count += 1
 
       const { dateTimeOriginal, photoFilename, videoFilename } = livePhoto
-      const date = parseExifDate(dateTimeOriginal)
+      const date = parseExifDateString(dateTimeOriginal)
 
       const { dir: newDir, filename: newPhotoFilename } = getNewFilename({
         filename: photoFilename,

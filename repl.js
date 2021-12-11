@@ -3,13 +3,18 @@
 const repl = require('repl')
 
 const lodash = require('lodash')
-const { DateTime } = require('luxon')
+const luxon = require('luxon')
 
 const copyFiles = require('./src/copyFiles')
 const copyLivePhotos = require('./src/copyLivePhotos')
 const setVideoDates = require('./src/setVideoDates')
 const updateTimezone = require('./src/updateTimezone')
-const exifUtils = require('./src/util/exif')
+
+import exiftoolSync from './src/exif/exiftoolSync.js'
+import getExifTags from './src/exif/getExifTags.js'
+import getExifTagValue from './src/exif/getExifTagValue.js'
+import parseExifDateString from './src/exif/parseExifDateString.js'
+
 import getNewFilename from './src/util/getNewFilename.js'
 import getNewSidecarFilename from './src/util/getNewSidecarFilename.js'
 const pathUtils = require('./src/util/path')
@@ -28,10 +33,10 @@ Object.defineProperty(r.context, 'lodash', {
   value: lodash,
 })
 
-Object.defineProperty(r.context, 'DateTime', {
+Object.defineProperty(r.context, 'luxon', {
   configurable: false,
   enumerable: true,
-  value: DateTime,
+  value: luxon,
 })
 
 Object.defineProperty(r.context, 'actions', {
@@ -45,11 +50,21 @@ Object.defineProperty(r.context, 'actions', {
   },
 })
 
+Object.defineProperty(r.context, 'exif', {
+  configurable: false,
+  enumerable: true,
+  value: {
+    exiftoolSync,
+    getExifTags,
+    getExifTagValue,
+    parseExifDateString,
+  },
+})
+
 Object.defineProperty(r.context, 'utils', {
   configurable: false,
   enumerable: true,
   value: {
-    exif: exifUtils,
     getNewFilename,
     getNewSidecarFilename,
     path: pathUtils,

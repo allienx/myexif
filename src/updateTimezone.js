@@ -1,6 +1,6 @@
 import { execSync } from 'child_process'
 import { DateTime } from 'luxon'
-import { getExifTagValue } from './util/exif.js'
+import getExifTagValue from './exif/getExifTagValue.js'
 
 export default function updateTimezone({
   filenames,

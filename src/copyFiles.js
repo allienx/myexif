@@ -2,7 +2,8 @@ import { execSync } from 'child_process'
 import fs from 'fs'
 import groupBy from 'lodash/groupBy.js'
 import path from 'path'
-import { getExifTags, parseExifDate } from './util/exif.js'
+import getExifTags from './exif/getExifTags.js'
+import parseExifDateString from './exif/parseExifDateString.js'
 import getNewFilename from './util/getNewFilename.js'
 import getNewSidecarFilename from './util/getNewSidecarFilename.js'
 
@@ -34,7 +35,7 @@ export default function copyFiles({ dryRun, filenames, dest }) {
         setAllDates({ dryRun, filename, tag })
       }
 
-      const date = parseExifDate(dateStr)
+      const date = parseExifDateString(dateStr)
 
       copyFile({ filename, date, dryRun, dest })
     })
