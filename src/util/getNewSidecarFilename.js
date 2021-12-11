@@ -1,5 +1,5 @@
 import path from 'path'
-import isValidPath from './isValidPath'
+import isValidPath from './isValidPath.js'
 
 export default function getNewSidecarFilename({ filename, newFilename }) {
   const { dir, name } = path.parse(filename)

@@ -1,4 +1,4 @@
-import exiftoolSync from 'src/exif/exiftoolSync'
+import exiftoolSync from './exiftoolSync.js'
 
 export default function getExifTags({ filenames, tags }) {
   const commandArgs = [

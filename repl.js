@@ -1,14 +1,14 @@
 #!/usr/bin/env node
 
-const repl = require('repl')
+import repl from 'repl'
 
-const lodash = require('lodash')
-const luxon = require('luxon')
+import lodash from 'lodash'
+import * as luxon from 'luxon'
 
-const copyFiles = require('./src/copyFiles')
-const copyLivePhotos = require('./src/copyLivePhotos')
-const setVideoDates = require('./src/setVideoDates')
-const updateTimezone = require('./src/updateTimezone')
+import copyFiles from './src/copyFiles.js'
+import copyLivePhotos from './src/copyLivePhotos.js'
+import setVideoDates from './src/setVideoDates.js'
+import updateTimezone from './src/updateTimezone.js'
 
 import exiftoolSync from './src/exif/exiftoolSync.js'
 import getExifTags from './src/exif/getExifTags.js'
@@ -42,7 +42,7 @@ Object.defineProperty(r.context, 'luxon', {
   value: luxon,
 })
 
-Object.defineProperty(r.context, 'actions', {
+Object.defineProperty(r.context, 'program', {
   configurable: false,
   enumerable: true,
   value: {
