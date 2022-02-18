@@ -23,7 +23,11 @@ export default function copyLivePhotos({ dryRun, dir, dest }) {
       const { dateTimeOriginal, photoFilename, videoFilename } = livePhoto
       const date = parseExifDateString(dateTimeOriginal)
 
-      const { dir: newDir, filename: newPhotoFilename } = getNewFilename({
+      const {
+        hash: photoHash,
+        dir: newDir,
+        filename: newPhotoFilename,
+      } = getNewFilename({
         filename: photoFilename,
         date,
         dest,
@@ -31,6 +35,7 @@ export default function copyLivePhotos({ dryRun, dir, dest }) {
 
       const { filename: newVideoFilename } = getNewFilename({
         filename: videoFilename,
+        filenameHash: photoHash,
         date,
         dest,
       })

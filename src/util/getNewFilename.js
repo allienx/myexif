@@ -1,14 +1,18 @@
+import { createHash } from 'crypto'
+import { readFileSync } from 'fs'
 import flowFp from 'lodash/fp/flow.js'
-import kebabCaseFp from 'lodash/fp/kebabCase.js'
 import toLowerFp from 'lodash/fp/toLower.js'
 import { DateTime } from 'luxon'
 import path from 'path'
 
-export default function getNewFilename({ filename, date, dest }) {
+export default function getNewFilename({ filename, filenameHash, date, dest }) {
+  const hash = filenameHash || getFilenameHash(filename)
+
   const newDir = getDirectory({ dest, date })
-  const newFilename = getFilename({ filename, date })
+  const newFilename = getFilename({ filename, filenameHash: hash, date })
 
   return {
+    hash,
     dir: newDir,
     filename: path.join(newDir, newFilename),
   }
@@ -22,28 +26,28 @@ function getDirectory({ dest, date }) {
   return path.join(dest, year, month)
 }
 
-function getFilename({ filename, date }) {
+function getFilename({ filename, filenameHash, date }) {
   const dt = DateTime.fromJSDate(date)
-  const dateStr = dt.toFormat('yyyy-MM-dd')
-  const timeStr = dt.toFormat('HH-mm-ss')
+  const dateStr = dt.toFormat('yyyyMMdd')
+  const timeStr = dt.toFormat('HHmmss')
 
-  const { name, ext } = path.parse(filename)
-  const newName = transformName(name)
-  const newExt = transformExtention(ext)
+  const { ext } = path.parse(filename)
+  const hash = filenameHash || getFilenameHash(filename)
+  const normalizedExtension = getNormalizedExtension(ext)
 
-  return `${dateStr}_${timeStr}_${newName}${newExt}`
+  return `${dateStr}-${timeStr}-${hash}${normalizedExtension}`
 }
 
-function transformName(name) {
-  const transform = flowFp(toLowerFp, kebabCaseFp)
+function getFilenameHash(name) {
+  const buffer = readFileSync(name)
 
-  return transform(name)
+  return createHash('md5').update(buffer).digest('hex').slice(0, 8)
 }
 
-function transformExtention(ext) {
-  const transform = flowFp(toLowerFp, toJpg)
+function getNormalizedExtension(ext) {
+  const normalize = flowFp(toLowerFp, toJpg)
 
-  return transform(ext)
+  return normalize(ext)
 }
 
 function toJpg(ext) {
