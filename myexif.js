@@ -1,6 +1,7 @@
 #!/usr/bin/env node
 
 import program from 'commander'
+
 import copyFiles from './src/copyFiles.js'
 import copyLivePhotos from './src/copyLivePhotos.js'
 import setVideoDates from './src/setVideoDates.js'
