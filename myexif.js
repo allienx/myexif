@@ -1,7 +1,6 @@
 #!/usr/bin/env node
 
 import program from 'commander'
-
 import copyFiles from './src/copyFiles.js'
 import copyLivePhotos from './src/copyLivePhotos.js'
 import setVideoDates from './src/setVideoDates.js'
@@ -16,7 +15,7 @@ program
   )
 
 program
-  .command('copy <paths...>')
+  .command('copy <dir>')
   .description(
     'Copies all photo and video files and organizes them based on their EXIF tag values.',
   )
@@ -29,36 +28,30 @@ program
     '-d, --dest <dir>',
     'the destination directory to move the files into',
   )
-  .action((filePaths, options) => {
-    const { dryRun, dest } = options
-
-    const filenames = getAllFiles(filePaths)
-
-    const count = copyFiles({ dryRun, filenames, dest })
-
-    console.log(`\n${count} files updated.`)
-  })
-
-program
-  .command('copy-live-photos <dir>')
-  .description(
-    'Finds live photo-video pairs and organizes them based on their EXIF tag values.',
-  )
-  .option(
-    '--dry-run',
-    'log live photo-video pairs without performing any actions',
-    false,
-  )
-  .requiredOption(
-    '-d, --dest <dir>',
-    'the destination directory to move the files into',
-  )
   .action((dir, options) => {
     const { dryRun, dest } = options
 
-    const count = copyLivePhotos({ dryRun, dir, dest })
+    if (dryRun) {
+      console.log('🧪 DRY RUN\n')
+    }
 
-    console.log(`\n${count} live photos updated.`)
+    // Get all file paths before any files are moved.
+    const initialFilenames = getAllFiles([dir])
+
+    const processedFilenames = copyLivePhotos({ dryRun, dir, dest })
+
+    // Exclude live photo files that were already processed.
+    const filenames = initialFilenames.filter((filename) => {
+      return !processedFilenames.includes(filename)
+    })
+
+    const copiedFilenames = copyFiles({ dryRun, filenames, dest })
+
+    console.log(
+      dryRun
+        ? `\n${copiedFilenames.length} files seen in dry run.`
+        : `\n${copiedFilenames.length} files updated.`,
+    )
   })
 
 program
@@ -78,9 +71,17 @@ program
   .action((filenames, options) => {
     const { dryRun, timezone } = options
 
+    if (dryRun) {
+      console.log('🧪 DRY RUN\n')
+    }
+
     const count = setVideoDates({ filenames, dryRun, timezone })
 
-    console.log(`\n${count} files updated.`)
+    console.log(
+      dryRun
+        ? `\n${count} files seen in dry run.`
+        : `\n${count} files updated.`,
+    )
   })
 
 program
@@ -110,6 +111,10 @@ program
   .action((filenames, options) => {
     const { dryRun, tag, srcTimezone, newTimezone } = options
 
+    if (dryRun) {
+      console.log('🧪 DRY RUN\n')
+    }
+
     const count = updateTimezone({
       filenames,
       dryRun,
@@ -118,7 +123,11 @@ program
       newTimezone,
     })
 
-    console.log(`\n${count} files updated.`)
+    console.log(
+      dryRun
+        ? `\n${count} files seen in dry run.`
+        : `\n${count} files updated.`,
+    )
   })
 
 const start = Date.now()

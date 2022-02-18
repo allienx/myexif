@@ -18,6 +18,10 @@ export default function copyFiles({ dryRun, filenames, dest }) {
 
   Object.entries(filesGroupedByTag).forEach(([exifTag, files]) => {
     if (exifTag === NO_TAG) {
+      console.log('🚧 Files found with no timestamp')
+      console.log(files)
+      console.log()
+
       return
     }
 
@@ -28,6 +32,10 @@ export default function copyFiles({ dryRun, filenames, dest }) {
       const { ext } = path.parse(filename)
 
       if (!dateStr) {
+        console.log('🚧 File found with no timestamp')
+        console.log(filename)
+        console.log()
+
         return
       }
 
@@ -41,7 +49,7 @@ export default function copyFiles({ dryRun, filenames, dest }) {
     })
   })
 
-  return filenames.length
+  return filenames
 }
 
 function setAllDates({ dryRun, filename, tag }) {

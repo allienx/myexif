@@ -6,16 +6,20 @@ import getNewFilename from './util/getNewFilename.js'
 import getNewSidecarFilename from './util/getNewSidecarFilename.js'
 
 export default function copyLivePhotos({ dryRun, dir, dest }) {
-  let count = 0
-  const photos = getLivePhotos(dir)
+  const processedFilenames = []
 
-  photos
+  const livePhotos = getLivePhotos(dir)
+
+  livePhotos
+    .map((livePhoto) => {
+      processedFilenames.push(livePhoto.photoFilename, livePhoto.videoFilename)
+
+      return livePhoto
+    })
     .filter((livePhoto) => {
       return livePhoto.isComplete
     })
     .forEach((livePhoto) => {
-      count += 1
-
       const { dateTimeOriginal, photoFilename, videoFilename } = livePhoto
       const date = parseExifDateString(dateTimeOriginal)
 
@@ -55,7 +59,7 @@ export default function copyLivePhotos({ dryRun, dir, dest }) {
       }
     })
 
-  return count
+  return processedFilenames
 }
 
 function getLivePhotos(dir) {
