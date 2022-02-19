@@ -1,4 +1,4 @@
-import fs from 'fs'
+import { mkdirSync } from 'fs'
 import path from 'path'
 import getExifTags from './exif/getExifTags.js'
 import parseExifDateString from './exif/parseExifDateString.js'
@@ -68,7 +68,7 @@ export default function organizeLivePhotos({ dryRun, copy, dir, dest }) {
       }
 
       if (!dryRun) {
-        fs.mkdirSync(newDir, { recursive: true })
+        mkdirSync(newDir, { recursive: true })
 
         copyOrMoveSync({
           copy,

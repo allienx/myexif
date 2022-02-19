@@ -1,4 +1,4 @@
-import fs from 'fs'
+import { mkdirSync } from 'fs'
 import groupBy from 'lodash/groupBy.js'
 import path from 'path'
 import exiftoolSync from './exif/exiftoolSync.js'
@@ -132,7 +132,7 @@ function copyFile({ dryRun, copy, hasValidTimestamp, filename, date, dest }) {
   }
 
   if (!dryRun) {
-    fs.mkdirSync(newDir, { recursive: true })
+    mkdirSync(newDir, { recursive: true })
 
     copyOrMoveSync({
       copy,
