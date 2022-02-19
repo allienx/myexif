@@ -1,5 +1,5 @@
-import { execSync } from 'child_process'
 import { DateTime } from 'luxon'
+import exiftoolSync from './exif/exiftoolSync.js'
 import getExifTagValue from './exif/getExifTagValue.js'
 
 export default function updateTimezone({
@@ -32,7 +32,7 @@ export default function updateTimezone({
     console.log(command)
 
     if (!dryRun) {
-      execSync(command)
+      exiftoolSync(command)
     }
   })
 

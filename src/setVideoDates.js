@@ -1,5 +1,5 @@
-import { execSync } from 'child_process'
 import { DateTime } from 'luxon'
+import exiftoolSync from './exif/exiftoolSync.js'
 import getExifTagValue from './exif/getExifTagValue.js'
 
 export default function setVideoDates({ filenames, dryRun, timezone }) {
@@ -34,7 +34,7 @@ export default function setVideoDates({ filenames, dryRun, timezone }) {
     console.log(command)
 
     if (!dryRun) {
-      execSync(command)
+      exiftoolSync(command)
     }
   })
 
