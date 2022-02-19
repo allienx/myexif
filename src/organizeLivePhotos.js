@@ -6,10 +6,10 @@ import copyOrMoveSync from './util/copyOrMoveSync.js'
 import getNewFilename from './util/getNewFilename.js'
 import getNewSidecarFilename from './util/getNewSidecarFilename.js'
 
-export default function organizeLivePhotos({ dryRun, copy, filenames, dest }) {
+export default function organizeLivePhotos({ dryRun, copy, dir, dest }) {
   const processedFiles = []
 
-  const livePhotos = getLivePhotos(filenames)
+  const livePhotos = getLivePhotos(dir)
 
   livePhotos
     .filter((livePhoto) => {
@@ -47,13 +47,11 @@ export default function organizeLivePhotos({ dryRun, copy, filenames, dest }) {
       processedFiles.push(
         {
           hasValidTimestamp: true,
-          isLivePhoto: true,
           originalFilepath: photoFilename,
           newFilepath: newPhotoFilename,
         },
         {
           hasValidTimestamp: true,
-          isLivePhoto: true,
           originalFilepath: videoFilename,
           newFilepath: newVideoFilename,
         },
@@ -64,7 +62,6 @@ export default function organizeLivePhotos({ dryRun, copy, filenames, dest }) {
 
         processedFiles.push({
           hasValidTimestamp: true,
-          isLivePhoto: true,
           originalFilepath: sidecarFilename,
           newFilepath: newSidecarFilename,
         })
@@ -97,9 +94,9 @@ export default function organizeLivePhotos({ dryRun, copy, filenames, dest }) {
   return processedFiles
 }
 
-function getLivePhotos(filenames) {
+function getLivePhotos(dir) {
   const exifTags = getExifTags({
-    filenames,
+    filenames: [`"${dir}"`],
     tags: [
       'EXIF:DateTimeOriginal',
       'MakerNotes:MediaGroupUUID',

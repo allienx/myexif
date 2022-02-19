@@ -31,7 +31,7 @@ program
     const { dryRun, copy, dest } = options
 
     if (dryRun) {
-      console.log('DRY RUN\n')
+      console.log('🧪 DRY RUN\n')
     }
 
     const processedFiles = organize({ dryRun, copy, dir, dest })
@@ -61,7 +61,7 @@ program
     const { dryRun, timezone } = options
 
     if (dryRun) {
-      console.log('DRY RUN\n')
+      console.log('🧪 DRY RUN\n')
     }
 
     const count = setVideoDates({ filenames, dryRun, timezone })
@@ -101,7 +101,7 @@ program
     const { dryRun, tag, srcTimezone, newTimezone } = options
 
     if (dryRun) {
-      console.log('DRY RUN\n')
+      console.log('🧪 DRY RUN\n')
     }
 
     const count = updateTimezone({

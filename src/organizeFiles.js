@@ -117,7 +117,6 @@ function copyFile({ dryRun, copy, hasValidTimestamp, filename, date, dest }) {
 
   processedFiles.push({
     hasValidTimestamp,
-    isLivePhoto: false,
     originalFilepath: filename,
     newFilepath: newFilename,
   })
@@ -127,7 +126,6 @@ function copyFile({ dryRun, copy, hasValidTimestamp, filename, date, dest }) {
 
     processedFiles.push({
       hasValidTimestamp,
-      isLivePhoto: false,
       originalFilepath: sidecarFilename,
       newFilepath: newSidecarFilename,
     })

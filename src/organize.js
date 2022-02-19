@@ -10,12 +10,7 @@ export default function organize({ dryRun, copy, dir, dest }) {
   // Get all file paths before any files are moved.
   const initialFilenames = getAllFiles([dir])
 
-  const processedLivePhotos = organizeLivePhotos({
-    dryRun,
-    copy,
-    filenames: initialFilenames,
-    dest,
-  })
+  const processedLivePhotos = organizeLivePhotos({ dryRun, copy, dir, dest })
 
   // Exclude live photo files that were already processed.
   const filenames = initialFilenames.filter((filename) => {
