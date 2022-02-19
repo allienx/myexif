@@ -36,8 +36,6 @@ program
 
     const processedFiles = organize({ dryRun, copy, dir, dest })
 
-    console.log(processedFiles)
-
     console.log(
       dryRun
         ? `\n${processedFiles.length} files seen in dry run.`
