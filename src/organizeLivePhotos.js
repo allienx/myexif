@@ -5,17 +5,12 @@ import parseExifDateString from './exif/parseExifDateString.js'
 import getNewFilename from './util/getNewFilename.js'
 import getNewSidecarFilename from './util/getNewSidecarFilename.js'
 
-export default function copyLivePhotos({ dryRun, dir, dest }) {
-  const processedFilenames = []
+export default function organizeLivePhotos({ dryRun, dir, dest }) {
+  const processedFiles = []
 
   const livePhotos = getLivePhotos(dir)
 
   livePhotos
-    .map((livePhoto) => {
-      processedFilenames.push(livePhoto.photoFilename, livePhoto.videoFilename)
-
-      return livePhoto
-    })
     .filter((livePhoto) => {
       return livePhoto.isComplete
     })
@@ -45,11 +40,30 @@ export default function copyLivePhotos({ dryRun, dir, dest }) {
         newFilename: newPhotoFilename,
       })
 
-      console.log(`${photoFilename} -> ${newPhotoFilename}`)
-      console.log(`${videoFilename} -> ${newVideoFilename}`)
+      console.log(`${photoFilename.padEnd(70, '.')}${newPhotoFilename}`)
+      console.log(`${videoFilename.padEnd(70, '.')}${newVideoFilename}`)
+
+      processedFiles.push(
+        {
+          hasValidTimestamp: true,
+          originalFilepath: photoFilename,
+          newFilepath: newPhotoFilename,
+        },
+        {
+          hasValidTimestamp: true,
+          originalFilepath: videoFilename,
+          newFilepath: newVideoFilename,
+        },
+      )
 
       if (newSidecarFilename) {
-        console.log(`${sidecarFilename} -> ${newSidecarFilename}`)
+        console.log(`${sidecarFilename.padEnd(70, '.')}${newSidecarFilename}`)
+
+        processedFiles.push({
+          hasValidTimestamp: true,
+          originalFilepath: sidecarFilename,
+          newFilepath: newSidecarFilename,
+        })
       }
 
       if (!dryRun) {
@@ -64,7 +78,7 @@ export default function copyLivePhotos({ dryRun, dir, dest }) {
       }
     })
 
-  return processedFilenames
+  return processedFiles
 }
 
 function getLivePhotos(dir) {

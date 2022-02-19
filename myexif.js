@@ -1,11 +1,9 @@
 #!/usr/bin/env node
 
 import program from 'commander'
-import copyFiles from './src/copyFiles.js'
-import copyLivePhotos from './src/copyLivePhotos.js'
+import organize from './src/organize.js'
 import setVideoDates from './src/setVideoDates.js'
 import updateTimezone from './src/updateTimezone.js'
-import getAllFiles from './src/util/getAllFiles.js'
 
 program
   .name('myexif')
@@ -15,9 +13,9 @@ program
   )
 
 program
-  .command('copy <dir>')
+  .command('organize <dir>')
   .description(
-    'Copies all photo and video files and organizes them based on their EXIF tag values.',
+    'Organizes all photo and video files based on their EXIF tag values.',
   )
   .option(
     '--dry-run',
@@ -35,22 +33,14 @@ program
       console.log('🧪 DRY RUN\n')
     }
 
-    // Get all file paths before any files are moved.
-    const initialFilenames = getAllFiles([dir])
+    const processedFiles = organize({ dryRun, dir, dest })
 
-    const processedFilenames = copyLivePhotos({ dryRun, dir, dest })
-
-    // Exclude live photo files that were already processed.
-    const filenames = initialFilenames.filter((filename) => {
-      return !processedFilenames.includes(filename)
-    })
-
-    const copiedFilenames = copyFiles({ dryRun, filenames, dest })
+    console.log(processedFiles)
 
     console.log(
       dryRun
-        ? `\n${copiedFilenames.length} files seen in dry run.`
-        : `\n${copiedFilenames.length} files updated.`,
+        ? `\n${processedFiles.length} files seen in dry run.`
+        : `\n${processedFiles.length} files updated.`,
     )
   })
 

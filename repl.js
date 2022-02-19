@@ -5,8 +5,8 @@ import repl from 'repl'
 import lodash from 'lodash'
 import * as luxon from 'luxon'
 
-import copyFiles from './src/copyFiles.js'
-import copyLivePhotos from './src/copyLivePhotos.js'
+import organizeFiles from './src/organizeFiles.js'
+import organizeLivePhotos from './src/organizeLivePhotos.js'
 import setVideoDates from './src/setVideoDates.js'
 import updateTimezone from './src/updateTimezone.js'
 
@@ -46,8 +46,8 @@ Object.defineProperty(r.context, 'program', {
   configurable: false,
   enumerable: true,
   value: {
-    copyFiles,
-    copyLivePhotos,
+    organizeFiles,
+    organizeLivePhotos,
     setVideoDates,
     updateTimezone,
   },
