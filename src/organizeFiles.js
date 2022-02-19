@@ -4,12 +4,13 @@ import path from 'path'
 import exiftoolSync from './exif/exiftoolSync.js'
 import getExifTags from './exif/getExifTags.js'
 import parseExifDateString from './exif/parseExifDateString.js'
+import copyOrMoveSync from './util/copyOrMoveSync.js'
 import getNewFilename from './util/getNewFilename.js'
 import getNewSidecarFilename from './util/getNewSidecarFilename.js'
 
 const NO_TAG = 'no_tag'
 
-export default function organizeFiles({ dryRun, filenames, dest }) {
+export default function organizeFiles({ dryRun, copy, filenames, dest }) {
   const processedFiles = []
 
   const filesGroupedByTag = groupBy(filenames, (filename) => {
@@ -46,6 +47,7 @@ export default function organizeFiles({ dryRun, filenames, dest }) {
 
       const files = copyFile({
         dryRun,
+        copy,
         hasValidTimestamp,
         filename,
         date,
@@ -98,7 +100,7 @@ function setAllDates({ dryRun, filename, tag }) {
   }
 }
 
-function copyFile({ dryRun, hasValidTimestamp, filename, date, dest }) {
+function copyFile({ dryRun, copy, hasValidTimestamp, filename, date, dest }) {
   const processedFiles = []
 
   const { dir: newDir, filename: newFilename } = getNewFilename({
@@ -132,10 +134,18 @@ function copyFile({ dryRun, hasValidTimestamp, filename, date, dest }) {
   if (!dryRun) {
     fs.mkdirSync(newDir, { recursive: true })
 
-    fs.copyFileSync(filename, newFilename)
+    copyOrMoveSync({
+      copy,
+      filename,
+      newFilename,
+    })
 
     if (newSidecarFilename) {
-      fs.copyFileSync(sidecarFilename, newSidecarFilename)
+      copyOrMoveSync({
+        copy,
+        filename: sidecarFilename,
+        newFilename: newSidecarFilename,
+      })
     }
   }
 

@@ -2,10 +2,11 @@ import fs from 'fs'
 import path from 'path'
 import getExifTags from './exif/getExifTags.js'
 import parseExifDateString from './exif/parseExifDateString.js'
+import copyOrMoveSync from './util/copyOrMoveSync.js'
 import getNewFilename from './util/getNewFilename.js'
 import getNewSidecarFilename from './util/getNewSidecarFilename.js'
 
-export default function organizeLivePhotos({ dryRun, dir, dest }) {
+export default function organizeLivePhotos({ dryRun, copy, dir, dest }) {
   const processedFiles = []
 
   const livePhotos = getLivePhotos(dir)
@@ -69,11 +70,23 @@ export default function organizeLivePhotos({ dryRun, dir, dest }) {
       if (!dryRun) {
         fs.mkdirSync(newDir, { recursive: true })
 
-        fs.copyFileSync(photoFilename, newPhotoFilename)
-        fs.copyFileSync(videoFilename, newVideoFilename)
+        copyOrMoveSync({
+          copy,
+          filename: photoFilename,
+          newFilename: newPhotoFilename,
+        })
+        copyOrMoveSync({
+          copy,
+          filename: videoFilename,
+          newFilename: newVideoFilename,
+        })
 
         if (newSidecarFilename) {
-          fs.copyFileSync(sidecarFilename, newSidecarFilename)
+          copyOrMoveSync({
+            copy,
+            filename: sidecarFilename,
+            newFilename: newSidecarFilename,
+          })
         }
       }
     })

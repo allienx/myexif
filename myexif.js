@@ -22,18 +22,19 @@ program
     'log exiftool commands without performing any actions',
     false,
   )
+  .option('--copy', 'copy the files instead of move', false)
   .requiredOption(
     '-d, --dest <dir>',
     'the destination directory to move the files into',
   )
   .action((dir, options) => {
-    const { dryRun, dest } = options
+    const { dryRun, copy, dest } = options
 
     if (dryRun) {
       console.log('🧪 DRY RUN\n')
     }
 
-    const processedFiles = organize({ dryRun, dir, dest })
+    const processedFiles = organize({ dryRun, copy, dir, dest })
 
     console.log(processedFiles)
 
