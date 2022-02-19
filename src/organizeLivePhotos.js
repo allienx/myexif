@@ -96,7 +96,7 @@ export default function organizeLivePhotos({ dryRun, copy, dir, dest }) {
 
 function getLivePhotos(dir) {
   const exifTags = getExifTags({
-    filenames: [`"${dir}"`],
+    filenames: [dir],
     tags: [
       'EXIF:DateTimeOriginal',
       'MakerNotes:MediaGroupUUID',

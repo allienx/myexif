@@ -5,7 +5,7 @@ export default function getExifTags({ filenames, tags }) {
     'exiftool',
     '-json',
     tags.map((t) => `-${t}`).join(' '),
-    filenames.map((fn) => `"${fn}"`).join(' '),
+    filenames.map((fn) => fn).join(' '),
   ]
   const command = commandArgs.join(' ')
   const stdout = exiftoolSync(command)
