@@ -2,14 +2,10 @@ import { mkdirSync, writeFileSync } from 'fs'
 import envPaths from 'env-paths'
 import { DateTime } from 'luxon'
 import path from 'path'
-import getAllFiles from './util/getAllFiles.js'
 import organizeFiles from './organizeFiles.js'
 import organizeLivePhotos from './organizeLivePhotos.js'
 
 export default function organize({ dryRun, copy, filenames, dest }) {
-  // Get all file paths before any files are moved.
-  const initialFilenames = getAllFiles(filenames)
-
   const processedLivePhotos = organizeLivePhotos({
     dryRun,
     copy,
@@ -17,17 +13,11 @@ export default function organize({ dryRun, copy, filenames, dest }) {
     dest,
   })
 
-  // Exclude live photo files that were already processed.
-  const nonLivePhotoFilenames = initialFilenames.filter((filename) => {
-    return !processedLivePhotos.find(
-      (file) => file.originalFilepath === filename,
-    )
-  })
-
   const processedFiles = organizeFiles({
     dryRun,
     copy,
-    filenames: nonLivePhotoFilenames,
+    filenames,
+    filenamesToSkip: processedLivePhotos.map((file) => file.originalFilepath),
     dest,
   })
 

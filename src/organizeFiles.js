@@ -13,12 +13,22 @@ const EXIF_TAGS = [
   'CreationDate',
 ]
 
-export default function organizeFiles({ dryRun, copy, filenames, dest }) {
+export default function organizeFiles({
+  dryRun,
+  copy,
+  filenames,
+  filenamesToSkip,
+  dest,
+}) {
   const processedFiles = []
 
   getExifTags({ filenames, tags: EXIF_TAGS }).forEach((obj) => {
     const filename = obj['SourceFile']
     const { ext } = path.parse(filename)
+
+    if (filenamesToSkip.includes(filename)) {
+      return
+    }
 
     const tag = getTag(ext)
     const dateStr = tag ? obj[tag] : null
