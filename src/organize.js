@@ -6,20 +6,30 @@ import getAllFiles from './util/getAllFiles.js'
 import organizeFiles from './organizeFiles.js'
 import organizeLivePhotos from './organizeLivePhotos.js'
 
-export default function organize({ dryRun, copy, dir, dest }) {
+export default function organize({ dryRun, copy, filenames, dest }) {
   // Get all file paths before any files are moved.
-  const initialFilenames = getAllFiles([dir])
+  const initialFilenames = getAllFiles(filenames)
 
-  const processedLivePhotos = organizeLivePhotos({ dryRun, copy, dir, dest })
+  const processedLivePhotos = organizeLivePhotos({
+    dryRun,
+    copy,
+    filenames,
+    dest,
+  })
 
   // Exclude live photo files that were already processed.
-  const filenames = initialFilenames.filter((filename) => {
+  const nonLivePhotoFilenames = initialFilenames.filter((filename) => {
     return !processedLivePhotos.find(
       (file) => file.originalFilepath === filename,
     )
   })
 
-  const processedFiles = organizeFiles({ dryRun, copy, filenames, dest })
+  const processedFiles = organizeFiles({
+    dryRun,
+    copy,
+    filenames: nonLivePhotoFilenames,
+    dest,
+  })
 
   const files = [...processedLivePhotos, ...processedFiles]
 

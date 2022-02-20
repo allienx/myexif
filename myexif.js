@@ -13,7 +13,7 @@ program
   )
 
 program
-  .command('organize <dir>')
+  .command('organize <filenames...>')
   .description(
     'Organizes all photo and video files based on their EXIF tag values.',
   )
@@ -27,14 +27,14 @@ program
     '-d, --dest <dir>',
     'the destination directory to move the files into',
   )
-  .action((dir, options) => {
+  .action((filenames, options) => {
     const { dryRun, copy, dest } = options
 
     if (dryRun) {
       console.log('🧪 DRY RUN\n')
     }
 
-    const processedFiles = organize({ dryRun, copy, dir, dest })
+    const processedFiles = organize({ dryRun, copy, filenames, dest })
 
     console.log(
       dryRun
