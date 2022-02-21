@@ -26,7 +26,9 @@ export default function organizeFiles({
     const filename = obj['SourceFile']
     const { ext } = path.parse(filename)
 
-    if (filenamesToSkip.includes(filename)) {
+    // Skip any file paths included in the blacklist or
+    // any sidecar files (they get moved along with its corresponding source file).
+    if (filenamesToSkip.includes(filename) || ext === '.aae') {
       return
     }
 
@@ -94,7 +96,7 @@ function copyFile({ dryRun, copy, hasValidTimestamp, filename, date, dest }) {
   })
 
   if (newSidecarFilename) {
-    console.log(`${sidecarFilename.padEnd(70, '.')} -> ${newSidecarFilename}`)
+    console.log(`${sidecarFilename.padEnd(70, '.')}${newSidecarFilename}`)
 
     processedFiles.push({
       hasValidTimestamp,
