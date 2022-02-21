@@ -20,7 +20,8 @@
     "glob": "7.2.0",
     "is-glob": "4.0.3",
     "lodash": "4.17.21",
-    "luxon": "2.3.0"
+    "luxon": "2.3.0",
+    "read-chunk": "4.0.2"
   },
   "devDependencies": {
     "prettier": "2.5.1"

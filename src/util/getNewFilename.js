@@ -1,9 +1,9 @@
 import { createHash } from 'crypto'
-import { readFileSync } from 'fs'
 import flowFp from 'lodash/fp/flow.js'
 import toLowerFp from 'lodash/fp/toLower.js'
 import { DateTime } from 'luxon'
 import path from 'path'
+import { readChunkSync } from 'read-chunk'
 
 export default function getNewFilename({ filename, filenameHash, date, dest }) {
   const hash = filenameHash || getFilenameHash(filename)
@@ -39,7 +39,8 @@ function getFilename({ filename, filenameHash, date }) {
 }
 
 function getFilenameHash(name) {
-  const buffer = readFileSync(name)
+  // Read 1MB of the file (avoids file too large errors).
+  const buffer = readChunkSync(name, { length: 1048576 })
 
   return createHash('md5').update(buffer).digest('hex').slice(0, 8)
 }

@@ -101,10 +101,22 @@ path-is-absolute@^1.0.0:
   resolved "https://registry.yarnpkg.com/path-is-absolute/-/path-is-absolute-1.0.1.tgz#174b9268735534ffbc7ace6bf53a5a9e1b5c5f5f"
   integrity sha1-F0uSaHNVNP+8es5r9TpanhtcX18=
 
+pify@^5.0.0:
+  version "5.0.0"
+  resolved "https://registry.yarnpkg.com/pify/-/pify-5.0.0.tgz#1f5eca3f5e87ebec28cc6d54a0e4aaf00acc127f"
+  integrity sha512-eW/gHNMlxdSP6dmG6uJip6FXN0EQBwm2clYYd8Wul42Cwu/DK8HEftzsapcNdYe2MfLiIwZqsDk2RDEsTE79hA==
+
 prettier@2.5.1:
   version "2.5.1"
   resolved "https://registry.yarnpkg.com/prettier/-/prettier-2.5.1.tgz#fff75fa9d519c54cf0fce328c1017d94546bc56a"
   integrity sha512-vBZcPRUR5MZJwoyi3ZoyQlc1rXeEck8KgeC9AwwOn+exuxLxq5toTRDTSaVrXHxelDMHy9zlicw8u66yxoSUFg==
+
+read-chunk@4.0.2:
+  version "4.0.2"
+  resolved "https://registry.yarnpkg.com/read-chunk/-/read-chunk-4.0.2.tgz#a2bb5fda9370b5967268011c73ce4fe33021497a"
+  integrity sha512-MwxmBiv62Dp+xbkm77q/WxeBMa6DfK8ad59OtdSsKSgUCK8mATQeA4RG7bmuUyXu2efSraZL21h0SI5k6wEVdA==
+  dependencies:
+    pify "^5.0.0"
 
 wrappy@1:
   version "1.0.2"
