@@ -53,18 +53,23 @@ program
     'log exiftool commands without performing any actions',
     false,
   )
+  .option(
+    '-e, --tag <tag>',
+    'the exiftool tag to read the date from',
+    'CreateDate',
+  )
   .requiredOption(
     '-t, --timezone <timezone>',
     'set the QuickTime:CreationDate EXIF tag relative to this timezone',
   )
   .action((filenames, options) => {
-    const { dryRun, timezone } = options
+    const { dryRun, tag, timezone } = options
 
     if (dryRun) {
       console.log('🧪 DRY RUN\n')
     }
 
-    const count = setVideoDates({ filenames, dryRun, timezone })
+    const count = setVideoDates({ dryRun, filenames, tag, timezone })
 
     console.log(
       dryRun

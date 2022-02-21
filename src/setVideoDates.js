@@ -1,14 +1,25 @@
 import { DateTime } from 'luxon'
+import getExifTags from 'src/exif/getExifTags.js'
 import exiftoolSync from './exif/exiftoolSync.js'
-import getExifTagValue from './exif/getExifTagValue.js'
 
-export default function setVideoDates({ filenames, dryRun, timezone }) {
-  filenames.forEach((filename) => {
-    const value = getExifTagValue(filename, 'QuickTime:CreateDate')
+export default function setVideoDates({ dryRun, filenames, tag, timezone }) {
+  getExifTags({ filenames, tags: [tag] }).forEach((obj) => {
+    const filename = obj['SourceFile']
+    const dateStr = obj[tag]
 
-    const dt = DateTime.fromFormat(value, 'yyyy:MM:dd HH:mm:ss', {
-      zone: 'Etc/UTC',
-    })
+    if (!dateStr) {
+      console.log(`${filename} has no value for exiftool tag ${tag}...`)
+
+      return
+    }
+
+    let dt = DateTime.fromFormat(dateStr, 'yyyy:MM:dd HH:mm:ssZZ')
+
+    if (!dt.isValid) {
+      dt = DateTime.fromFormat(dateStr, 'yyyy:MM:dd HH:mm:ss', {
+        zone: 'Etc/UTC',
+      })
+    }
 
     const dtInUtc = dt.setZone('Etc/UTC').toFormat('yyyy:MM:dd HH:mm:ss')
     const dtWithTimezone = dt
