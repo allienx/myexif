@@ -28,7 +28,7 @@ export default function organizeFiles({
 
     // Skip any file paths included in the blacklist or
     // any sidecar files (they get moved along with its corresponding source file).
-    if (filenamesToSkip.includes(filename) || ext === '.aae') {
+    if (filenamesToSkip.includes(filename) || ext.toLowerCase() === '.aae') {
       return
     }
 
