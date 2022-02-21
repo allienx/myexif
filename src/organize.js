@@ -23,18 +23,20 @@ export default function organize({ dryRun, copy, filenames, dest }) {
 
   const files = [...processedLivePhotos, ...processedFiles]
 
-  const dt = DateTime.now()
-  const paths = envPaths('myexif')
-  const logFilename = path.join(
-    paths.log,
-    `${dt.toFormat('yyyyMMdd-HHmmss')}-result.json`,
-  )
-  const logData = { createdAt: dt.toISO(), processedFiles: files }
+  if (!dryRun) {
+    const dt = DateTime.now()
+    const paths = envPaths('myexif')
+    const logFilename = path.join(
+      paths.log,
+      `${dt.toFormat('yyyyMMdd-HHmmss')}-result.json`,
+    )
+    const logData = { createdAt: dt.toISO(), processedFiles: files }
 
-  mkdirSync(paths.log, { recursive: true })
-  writeFileSync(logFilename, JSON.stringify(logData, null, 2))
+    mkdirSync(paths.log, { recursive: true })
+    writeFileSync(logFilename, JSON.stringify(logData, null, 2))
 
-  console.log(`\nLogged results to ${logFilename}`)
+    console.log(`\nLogged results to ${logFilename}`)
+  }
 
   return files
 }
