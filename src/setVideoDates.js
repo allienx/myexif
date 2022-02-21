@@ -1,6 +1,6 @@
 import { DateTime } from 'luxon'
-import getExifTags from 'src/exif/getExifTags.js'
 import exiftoolSync from './exif/exiftoolSync.js'
+import getExifTags from './exif/getExifTags.js'
 
 export default function setVideoDates({ dryRun, filenames, tag, timezone }) {
   getExifTags({ filenames, tags: [tag] }).forEach((obj) => {
