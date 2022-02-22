@@ -1,15 +1,20 @@
 import { createHash } from 'crypto'
 import flowFp from 'lodash/fp/flow.js'
 import toLowerFp from 'lodash/fp/toLower.js'
-import { DateTime } from 'luxon'
 import path from 'path'
 import { readChunkSync } from 'read-chunk'
+import parseExifDateString from '../exif/parseExifDateString.js'
 
-export default function getNewFilename({ filename, filenameHash, date, dest }) {
+export default function getNewFilename({
+  filename,
+  filenameHash,
+  exifDateStr,
+  dest,
+}) {
   const hash = filenameHash || getFilenameHash(filename)
 
-  const newDir = getDirectory({ dest, date })
-  const newFilename = getFilename({ filename, filenameHash: hash, date })
+  const newDir = getDirectory({ dest, exifDateStr })
+  const newFilename = getFilename({ filename, filenameHash: hash, exifDateStr })
 
   return {
     hash,
@@ -18,16 +23,16 @@ export default function getNewFilename({ filename, filenameHash, date, dest }) {
   }
 }
 
-function getDirectory({ dest, date }) {
-  const dt = DateTime.fromJSDate(date)
+function getDirectory({ dest, exifDateStr }) {
+  const dt = parseExifDateString(exifDateStr)
   const year = dt.toFormat('yyyy')
   const month = dt.toFormat('MM-MMM')
 
   return path.join(dest, year, month)
 }
 
-function getFilename({ filename, filenameHash, date }) {
-  const dt = DateTime.fromJSDate(date)
+function getFilename({ filename, filenameHash, exifDateStr }) {
+  const dt = parseExifDateString(exifDateStr)
   const dateStr = dt.toFormat('yyyyMMdd')
   const timeStr = dt.toFormat('HHmmss')
 

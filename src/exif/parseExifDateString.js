@@ -9,5 +9,5 @@ export default function parseExifDateString(dateStr) {
     dt = DateTime.fromFormat(dateStr, 'yyyy:MM:dd HH:mm:ss')
   }
 
-  return dt.toJSDate()
+  return dt
 }

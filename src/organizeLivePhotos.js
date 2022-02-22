@@ -1,7 +1,6 @@
 import { mkdirSync } from 'fs'
 import path from 'path'
 import getExifTags from './exif/getExifTags.js'
-import parseExifDateString from './exif/parseExifDateString.js'
 import copyOrMoveSync from './util/copyOrMoveSync.js'
 import getNewFilename from './util/getNewFilename.js'
 import getNewSidecarFilename from './util/getNewSidecarFilename.js'
@@ -17,7 +16,6 @@ export default function organizeLivePhotos({ dryRun, copy, filenames, dest }) {
     })
     .forEach((livePhoto) => {
       const { dateTimeOriginal, photoFilename, videoFilename } = livePhoto
-      const date = parseExifDateString(dateTimeOriginal)
 
       const {
         hash: photoHash,
@@ -25,14 +23,14 @@ export default function organizeLivePhotos({ dryRun, copy, filenames, dest }) {
         filename: newPhotoFilename,
       } = getNewFilename({
         filename: photoFilename,
-        date,
+        exifDateStr: dateTimeOriginal,
         dest,
       })
 
       const { filename: newVideoFilename } = getNewFilename({
         filename: videoFilename,
         filenameHash: photoHash,
-        date,
+        exifDateStr: dateTimeOriginal,
         dest,
       })
 

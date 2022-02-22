@@ -1,7 +1,6 @@
 import { mkdirSync } from 'fs'
 import path from 'path'
 import getExifTags from './exif/getExifTags.js'
-import parseExifDateString from './exif/parseExifDateString.js'
 import copyOrMoveSync from './util/copyOrMoveSync.js'
 import getNewFilename from './util/getNewFilename.js'
 import getNewSidecarFilename from './util/getNewSidecarFilename.js'
@@ -36,15 +35,15 @@ export default function organizeFiles({
     const dateStr = tag ? obj[tag] : null
     const fileModifyDateStr = obj['FileModifyDate']
 
-    const date = parseExifDateString(dateStr || fileModifyDateStr)
     const hasValidTimestamp = !!dateStr
+    const exifDateStr = dateStr || fileModifyDateStr
 
     const files = copyFile({
       dryRun,
       copy,
       hasValidTimestamp,
       filename,
-      date,
+      exifDateStr,
       dest,
     })
 
@@ -74,12 +73,19 @@ function getTag(ext) {
   }
 }
 
-function copyFile({ dryRun, copy, hasValidTimestamp, filename, date, dest }) {
+function copyFile({
+  dryRun,
+  copy,
+  hasValidTimestamp,
+  filename,
+  exifDateStr,
+  dest,
+}) {
   const processedFiles = []
 
   const { dir: newDir, filename: newFilename } = getNewFilename({
     filename,
-    date,
+    exifDateStr,
     dest,
   })
 
