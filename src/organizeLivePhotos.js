@@ -41,9 +41,6 @@ export default function organizeLivePhotos({ dryRun, copy, filenames, dest }) {
         newFilename: newPhotoFilename,
       })
 
-      console.log(`${photoFilename.padEnd(70, '.')}${newPhotoFilename}`)
-      console.log(`${videoFilename.padEnd(70, '.')}${newVideoFilename}`)
-
       processedFiles.push(
         {
           hasValidTimestamp: true,
@@ -59,35 +56,38 @@ export default function organizeLivePhotos({ dryRun, copy, filenames, dest }) {
 
       if (newSidecarFilename) {
         console.log(`${sidecarFilename.padEnd(70, '.')}${newSidecarFilename}`)
+      }
 
+      if (!dryRun) {
+        mkdirSync(newDir, { recursive: true })
+      }
+
+      copyOrMoveSync({
+        dryRun,
+        copy,
+        filename: photoFilename,
+        newFilename: newPhotoFilename,
+      })
+      copyOrMoveSync({
+        dryRun,
+        copy,
+        filename: videoFilename,
+        newFilename: newVideoFilename,
+      })
+
+      if (newSidecarFilename) {
         processedFiles.push({
           hasValidTimestamp: true,
           originalFilepath: sidecarFilename,
           newFilepath: newSidecarFilename,
         })
-      }
-
-      if (!dryRun) {
-        mkdirSync(newDir, { recursive: true })
 
         copyOrMoveSync({
+          dryRun,
           copy,
-          filename: photoFilename,
-          newFilename: newPhotoFilename,
+          filename: sidecarFilename,
+          newFilename: newSidecarFilename,
         })
-        copyOrMoveSync({
-          copy,
-          filename: videoFilename,
-          newFilename: newVideoFilename,
-        })
-
-        if (newSidecarFilename) {
-          copyOrMoveSync({
-            copy,
-            filename: sidecarFilename,
-            newFilename: newSidecarFilename,
-          })
-        }
       }
     })
 

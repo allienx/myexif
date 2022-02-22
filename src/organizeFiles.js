@@ -82,12 +82,11 @@ function copyFile({ dryRun, copy, hasValidTimestamp, filename, date, dest }) {
     date,
     dest,
   })
+
   const { sidecarFilename, newSidecarFilename } = getNewSidecarFilename({
     filename,
     newFilename,
   })
-
-  console.log(`${filename.padEnd(70, '.')}${newFilename}`)
 
   processedFiles.push({
     hasValidTimestamp,
@@ -95,32 +94,30 @@ function copyFile({ dryRun, copy, hasValidTimestamp, filename, date, dest }) {
     newFilepath: newFilename,
   })
 
-  if (newSidecarFilename) {
-    console.log(`${sidecarFilename.padEnd(70, '.')}${newSidecarFilename}`)
+  if (!dryRun) {
+    mkdirSync(newDir, { recursive: true })
+  }
 
+  copyOrMoveSync({
+    dryRun,
+    copy,
+    filename,
+    newFilename,
+  })
+
+  if (newSidecarFilename) {
     processedFiles.push({
       hasValidTimestamp,
       originalFilepath: sidecarFilename,
       newFilepath: newSidecarFilename,
     })
-  }
-
-  if (!dryRun) {
-    mkdirSync(newDir, { recursive: true })
 
     copyOrMoveSync({
+      dryRun,
       copy,
-      filename,
-      newFilename,
+      filename: sidecarFilename,
+      newFilename: newSidecarFilename,
     })
-
-    if (newSidecarFilename) {
-      copyOrMoveSync({
-        copy,
-        filename: sidecarFilename,
-        newFilename: newSidecarFilename,
-      })
-    }
   }
 
   return processedFiles
