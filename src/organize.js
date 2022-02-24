@@ -9,9 +9,12 @@ import organizeLivePhotos from './organizeLivePhotos.js'
 
 export default function organize({ dryRun, copy, dir, dest }) {
   const allDirectoryPaths = isDirectory(dir)
-    ? glob.sync(path.join(dir, '**', '*')).filter((p) => {
-        return isDirectory(p)
-      })
+    ? [
+        dir,
+        ...glob.sync(path.join(dir, '**', '*')).filter((p) => {
+          return isDirectory(p)
+        }),
+      ]
     : [dir]
   const processedFiles = []
 

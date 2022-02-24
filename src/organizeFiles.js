@@ -22,7 +22,7 @@ export default function organizeFiles({
   const processedFiles = []
 
   getExifTags({ filenames, tags: EXIF_TAGS }).forEach((obj) => {
-    const filename = obj['SourceFile']
+    const filename = path.normalize(obj['SourceFile'])
     const { ext } = path.parse(filename)
 
     // Skip any file paths included in the blacklist or
