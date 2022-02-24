@@ -15,9 +15,9 @@ export default function organizeLivePhotos({ dryRun, copy, filenames, dest }) {
       return livePhoto.isComplete
     })
     .forEach((livePhoto) => {
-      const { dateTimeOriginal, photoFilename, videoFilename } = livePhoto
+      let { dateTimeOriginal, photoFilename, videoFilename } = livePhoto
 
-      const {
+      let {
         hash: photoHash,
         dir: newDir,
         filename: newPhotoFilename,
@@ -27,17 +27,24 @@ export default function organizeLivePhotos({ dryRun, copy, filenames, dest }) {
         dest,
       })
 
-      const { filename: newVideoFilename } = getNewFilename({
+      let { filename: newVideoFilename } = getNewFilename({
         filename: videoFilename,
         filenameHash: photoHash,
         exifDateStr: dateTimeOriginal,
         dest,
       })
 
-      const { sidecarFilename, newSidecarFilename } = getNewSidecarFilename({
+      let { sidecarFilename, newSidecarFilename } = getNewSidecarFilename({
         filename: photoFilename,
         newFilename: newPhotoFilename,
       })
+
+      photoFilename = path.normalize(photoFilename)
+      newPhotoFilename = path.normalize(newPhotoFilename)
+      videoFilename = path.normalize(videoFilename)
+      newVideoFilename = path.normalize(newVideoFilename)
+      sidecarFilename = path.normalize(sidecarFilename || '')
+      newSidecarFilename = path.normalize(newSidecarFilename || '')
 
       processedFiles.push(
         {
@@ -51,10 +58,6 @@ export default function organizeLivePhotos({ dryRun, copy, filenames, dest }) {
           newFilepath: newVideoFilename,
         },
       )
-
-      if (newSidecarFilename) {
-        console.log(`${sidecarFilename.padEnd(70, '.')}${newSidecarFilename}`)
-      }
 
       if (!dryRun) {
         mkdirSync(newDir, { recursive: true })

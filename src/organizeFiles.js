@@ -83,16 +83,21 @@ function copyFile({
 }) {
   const processedFiles = []
 
-  const { dir: newDir, filename: newFilename } = getNewFilename({
+  let { dir: newDir, filename: newFilename } = getNewFilename({
     filename,
     exifDateStr,
     dest,
   })
 
-  const { sidecarFilename, newSidecarFilename } = getNewSidecarFilename({
+  let { sidecarFilename, newSidecarFilename } = getNewSidecarFilename({
     filename,
     newFilename,
   })
+
+  filename = path.normalize(filename)
+  newFilename = path.normalize(newFilename)
+  sidecarFilename = path.normalize(sidecarFilename || '')
+  newSidecarFilename = path.normalize(newSidecarFilename || '')
 
   processedFiles.push({
     hasValidTimestamp,
