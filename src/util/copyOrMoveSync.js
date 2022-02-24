@@ -1,4 +1,4 @@
-import { copyFileSync, renameSync } from 'fs'
+import fse from 'fs-extra'
 
 export default function copyOrMoveSync({
   dryRun,
@@ -17,6 +17,6 @@ export default function copyOrMoveSync({
   }
 
   return copy
-    ? copyFileSync(filename, newFilename)
-    : renameSync(filename, newFilename)
+    ? fse.copySync(filename, newFilename, { preserveTimestamps: true })
+    : fse.moveSync(filename, newFilename, {})
 }

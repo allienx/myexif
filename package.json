@@ -17,6 +17,7 @@
   "dependencies": {
     "commander": "7.2.0",
     "env-paths": "3.0.0",
+    "fs-extra": "10.0.1",
     "glob": "7.2.0",
     "is-glob": "4.0.3",
     "lodash": "4.17.21",
