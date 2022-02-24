@@ -96,8 +96,10 @@ function copyFile({
 
   filename = path.normalize(filename)
   newFilename = path.normalize(newFilename)
-  sidecarFilename = path.normalize(sidecarFilename || '')
-  newSidecarFilename = path.normalize(newSidecarFilename || '')
+  sidecarFilename = sidecarFilename ? path.normalize(sidecarFilename) : null
+  newSidecarFilename = newSidecarFilename
+    ? path.normalize(newSidecarFilename || '')
+    : null
 
   processedFiles.push({
     hasValidTimestamp,

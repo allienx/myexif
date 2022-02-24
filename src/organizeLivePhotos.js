@@ -43,8 +43,10 @@ export default function organizeLivePhotos({ dryRun, copy, filenames, dest }) {
       newPhotoFilename = path.normalize(newPhotoFilename)
       videoFilename = path.normalize(videoFilename)
       newVideoFilename = path.normalize(newVideoFilename)
-      sidecarFilename = path.normalize(sidecarFilename || '')
-      newSidecarFilename = path.normalize(newSidecarFilename || '')
+      sidecarFilename = sidecarFilename ? path.normalize(sidecarFilename) : null
+      newSidecarFilename = newSidecarFilename
+        ? path.normalize(newSidecarFilename || '')
+        : null
 
       processedFiles.push(
         {

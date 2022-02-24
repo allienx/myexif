@@ -10,5 +10,9 @@ export default function getExifTags({ filenames, tags }) {
   const command = commandArgs.join(' ')
   const stdout = exiftoolSync(command)
 
-  return JSON.parse(stdout)
+  try {
+    return JSON.parse(stdout)
+  } catch (err) {
+    return []
+  }
 }
