@@ -121,3 +121,4 @@ dist
 # Custom additions
 .DS_Store
 .idea/
+.scripts/
