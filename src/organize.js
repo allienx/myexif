@@ -7,7 +7,7 @@ import isDirectory from './util/isDirectory.js'
 import organizeFiles from './organizeFiles.js'
 import organizeLivePhotos from './organizeLivePhotos.js'
 
-export default function organize({ dryRun, copy, dir, dest }) {
+export default function organize({ dryRun, copy, logDir, dir, dest }) {
   const allDirectoryPaths = isDirectory(dir)
     ? [
         dir,
@@ -24,8 +24,8 @@ export default function organize({ dryRun, copy, dir, dest }) {
     processedFiles.push(...files)
   })
 
-  if (!dryRun) {
-    writeLogFile(processedFiles)
+  if (!dryRun && processedFiles.length > 0) {
+    writeLogFile(processedFiles, { logDir })
   }
 
   return processedFiles
@@ -50,9 +50,9 @@ function runOrganize({ dryRun, copy, dir, dest }) {
   return [...processedLivePhotos, ...processedFiles]
 }
 
-function writeLogFile(files) {
+function writeLogFile(files, { logDir }) {
   const dt = DateTime.now()
-  const paths = envPaths('myexif')
+  const paths = envPaths(logDir)
   const logFilename = path.join(
     paths.log,
     `${dt.toFormat('yyyyMMdd-HHmmss')}-result.json`,

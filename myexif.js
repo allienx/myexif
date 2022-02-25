@@ -23,18 +23,19 @@ program
     false,
   )
   .option('--copy', 'copy the files instead of move', false)
+  .option('--log-dir <dir>', 'the name of the log file directory', 'myexif')
   .requiredOption(
     '-d, --dest <dir>',
     'the destination directory to move the files into',
   )
   .action((dir, options) => {
-    const { dryRun, copy, dest } = options
+    const { dryRun, copy, logDir, dest } = options
 
     if (dryRun) {
       console.log('🧪 DRY RUN\n')
     }
 
-    const processedFiles = organize({ dryRun, copy, dir, dest })
+    const processedFiles = organize({ dryRun, copy, logDir, dir, dest })
 
     console.log(
       dryRun
