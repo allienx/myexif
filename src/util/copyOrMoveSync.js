@@ -18,5 +18,5 @@ export default function copyOrMoveSync({
 
   return copy
     ? fse.copySync(filename, newFilename, { preserveTimestamps: true })
-    : fse.moveSync(filename, newFilename, {})
+    : fse.moveSync(filename, newFilename, { overwrite: true })
 }
