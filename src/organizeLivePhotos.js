@@ -102,6 +102,7 @@ function getLivePhotos(filenames) {
     filenames,
     tags: [
       'EXIF:DateTimeOriginal',
+      'MakerNotes:ContentIdentifier',
       'MakerNotes:MediaGroupUUID',
       'QuickTime:ContentIdentifier',
     ],
